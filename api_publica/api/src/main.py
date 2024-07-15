@@ -1150,3 +1150,9 @@ async def SolicitationOldByCPF(cpf:str):
         return {
             'response': 'cpf não encontrado'
         }
+
+@app.get("/testilson")
+async def testando():
+    return {
+        'response': 'funcionou'
+    }
