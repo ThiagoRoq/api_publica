@@ -407,7 +407,6 @@ class Queries(str, Enum):
     from aprovados_pcd 
     where alert_id = %s;
     '''
-    #cmd
 
     get_informations_carteirinha_ciptea = '''
     select numero_carteira, UPPER(nome) as nome, foto_3x4, foto_digital, UPPER(REPLACE(bairro_beneficiario_meta, '_', ' ')) as bairro_beneficiario_meta, 
@@ -416,4 +415,24 @@ class Queries(str, Enum):
     UPPER(responsavel_legal_do_beneficiario_meta), telefone_responsavel_meta, email_meta, SHA1(alert_id) as hash_alert_id, alert_id
     from aprovados_ciptea 
     where alert_id = %s;
+    '''
+
+    get_informations_recepcao = '''
+    select benef_cpf, hashId, UPPER(benef_nome) AS nome, alert_id, tipo_da_deficiencia_meta, UPPER(REPLACE(
+        TRIM(BOTH ' ' FROM REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+[ ]+', '')), 
+        '_', 
+        ' '
+    )) AS local_de_retirada, 
+    municipios_naturalidade_meta, 
+    UPPER(REPLACE(cid, '_', ' ')) AS cid, 
+    CASE 
+        WHEN channelId = 12837 THEN 'CIPTEA' 
+        WHEN channelId = 12836 THEN 'PCD' 
+    END AS carteirinha, 
+    created_at
+    FROM solicitacoes
+    WHERE 1=1 {conditions}
+    ORDER BY created_at {order} 
+    LIMIT %s 
+    OFFSET %s
     '''
