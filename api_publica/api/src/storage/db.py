@@ -146,7 +146,7 @@ def get_historico_by_cpf(cpf: str) -> List[HistoryByCPF]:
   
 def get_recepcao(filters:dict) -> List[SolicitationRecepcao]:
     query = Queries.get_informations_recepcao
-    order = filters.get['order']
+    order = filters['order']
     params = []
     condition = ''
     if filters.get('cpf'):
