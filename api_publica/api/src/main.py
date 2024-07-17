@@ -494,6 +494,20 @@ def serialize_solicitation_old_cpf(requests):
     "estrutura": r.estrutura
     }for r in requests]
 
+def serialize_recepcao(requests):
+    return [{
+    'cpf':r.benef_cpf,
+    'hashId':r.hashId,
+    'nome':r.nome,
+    'alert_id': r.alert_id,
+    'tipo_da_deficiencia_meta': r.tipo_da_deficiencia_meta,
+    'local_de_retirada': r.local_de_retirada,
+    'municipios_naturalidade_meta': r.municipios_naturalidade_meta,
+    'cid': r.cid,
+    'carteirinha': r.carteirinha,
+    'created_at': r.created_at
+    }for r in requests]
+
 @app.get("/requests")
 async def requests(limit='100', offset='0', full='false'):
     requests = get_requests(int(limit), int(offset))
@@ -1149,6 +1163,19 @@ async def SolicitationOldByCPF(cpf:str):
     except (json.JSONDecodeError, AttributeError):
         return {
             'response': 'cpf não encontrado'
+        }
+
+@app.get("/recepcao")
+async def solicitacaoRecepcao(cpf:str, alert_id:int, nome:str, order:str, inicio:int, fim:int):
+    parameters = {'cpf': cpf, 'alert_id': alert_id, 'nome': nome, 'order': order, 'inicio':inicio, 'fim':fim}
+    try:
+        requests = get_recepcao(parameters)
+        return{
+            'response': serialize_recepcao(requests)
+        }
+    except (json.JSONDecodeError, AttributeError):
+        return {
+            'response': 'nenhum dado foi encontrado'
         }
 
 @app.get("/testilson")
