@@ -418,6 +418,20 @@ class SolicitationRequest:
     self.created_at = created_at
     self.updated_at = updated_at
 
+class SolicitationRecepcao:
+    def __init__(self, benef_cpf, hashId, nome, alert_id, tipo_da_deficiencia_meta, local_de_retirada, 
+                 municipios_naturalidade_meta, cid, carteirinha, created_at):
+        self.benef_cpf = benef_cpf
+        self.hashId = hashId
+        self.nome = nome
+        self.alert_id = alert_id
+        self.tipo_da_deficiencia_meta = tipo_da_deficiencia_meta
+        self.local_de_retirada = local_de_retirada
+        self.municipios_naturalidade_meta = municipios_naturalidade_meta
+        self.cid = cid
+        self.carteirinha = carteirinha
+        self.created_at = created_at
+
 class SolicitationAlertRequest:
   def __init__(self, id, alert_id, benef_cpf, meta, attachments, statusId, channelId, tipo_carteira, updated_at, created_at) -> None:
     self.id = id
@@ -598,7 +612,7 @@ class SolicitationByhashId:
         if doc_rg_do_beneficiario_frente_anexo:
           doc_rg_do_beneficiario_frente_anexo  = extract_attachments_images(doc_rg_do_beneficiario_frente_anexo) 
 
-        doc_curatela_anexo = meta_dict.get('doc_curatela_anexo')
+        doc_curatela_anexo = meta_dict.get('doc_curatela_anexo') or meta_dict.get("doc_tutela_do_menor_anexo")
         if doc_curatela_anexo != None:
           doc_curatela_anexo = extract_attachments_images(doc_curatela_anexo)
         
