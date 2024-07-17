@@ -543,8 +543,8 @@ async def get_cpf(
         municipio_realizado_cadastro: Optional[str] = Query(None, alias='municipio_realizado_cadastro'),
         local_de_retirada: Optional[str] = Query(None, alias = 'local_de_retirada'),
         deficiencia: Optional[str] = Query(None, alias= 'deficiencia'),
-        start_date: Optional[int] = Query(None, alias='start_date'),
-        end_date: Optional[int] = Query(None, alias='end_date'),
+        start_date: Optional[str] = Query(None, alias='start_date'),
+        end_date: Optional[str] = Query(None, alias='end_date'),
         especific_date: Optional[str] = Query(None, alias='especific_date')
 ):
     filters = {'view': view, 'order': order, 'inicio': inicio, 'fim': fim, 'cpf': cpf, 
