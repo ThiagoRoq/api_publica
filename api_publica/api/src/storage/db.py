@@ -144,6 +144,31 @@ def get_historico_by_cpf(cpf: str) -> List[HistoryByCPF]:
 
     return [HistoryByCPF(*req) for req in requests]        
   
+def get_recepcao(filters:dict) -> List[SolicitationRecepcao]:
+    query = Queries.get_informations_recepcao
+    order = filters.get['order']
+    params = []
+    condition = ''
+    if filters.get('cpf'):
+        condition += "and benef_cpf = %s"
+        params.append(filters['cpf'])
+    if filters.get('alert_id'):
+        condition += "and alert_id = %s"
+        params.append(filters['alert_id'])
+    if filters.get('nome'):
+        condition += "and benef_nome like %s"
+        params.append('%'+filters['nome']+'%')
+    
+    params.append(filters['fim'])
+    params.append(filters['inicio'])
+
+    conn = get_conn()
+    cursor = conn.cursor()
+        
+    cursor.execute(query.format(conditions=condition, order=order), params)
+    requests = cursor.fetchall()
+
+    return [SolicitationRecepcao(*req) for req in requests]        
 
 def get_alert_events_by_cpf(cpf: str) -> List[AlertEventsBYCPF]:
     query = Queries.get_alert_events_by_cpf
