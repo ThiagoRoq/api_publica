@@ -1166,7 +1166,13 @@ async def SolicitationOldByCPF(cpf:str):
         }
 
 @app.get("/recepcao")
-async def solicitacaoRecepcao(cpf:str, alert_id:int, nome:str, order:str, inicio:int, fim:int):
+async def solicitacaoRecepcao(cpf: Optional[str] = Query(None, alias='cpf'), 
+                              alert_id: Optional[int] = Query(None, alias='alert_id'), 
+                              nome: Optional[str] = Query(None, alias='nome'), 
+                              order: str = Query(...), 
+                              inicio: int = Query(...), 
+                              fim: int = Query(...)):
+    
     parameters = {'cpf': cpf, 'alert_id': alert_id, 'nome': nome, 'order': order, 'inicio':inicio, 'fim':fim}
     try:
         requests = get_recepcao(parameters)
