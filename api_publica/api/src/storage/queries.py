@@ -75,7 +75,8 @@ class Queries(str, Enum):
             fn_CALC_IDADE(benef_data_nasc) as idade, benef_telefone, local_de_retirada_meta,
             group_concat(channelId) as channelId,
             group_concat(alert_id) as alert_id,
-            max(created_at) as last_created, max(updated_at) as last_updated, count(*) 
+            MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) AS last_created, 
+            MAX(DATE(CONVERT_TZ(updated_at, '+00:00', '-04:00'))) AS last_updated, count(*) 
                 from solicitacoes where {conditions}
             group by benef_cpf having 1=1 {conditions_group} order by last_created {order} limit %s offset %s;
     '''
@@ -435,4 +436,8 @@ class Queries(str, Enum):
     ORDER BY created_at {order} 
     LIMIT %s 
     OFFSET %s
+    '''
+
+    get_count_recepcao = '''
+    select count(*) from solicitacoes where 1=1 {conditions}
     '''
