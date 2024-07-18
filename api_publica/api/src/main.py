@@ -50,6 +50,7 @@ def serialize_hash(requests):
         'nome_responsavel': r.resp_nome,
         'cid': r.cid,
         'deficiencia': r.tipo_da_deficiencia_meta,
+        'naturalidade': r.naturalidade,
         'idade': r.idade,
         'telefone_beneficiario': r.benef_telefone,
         'local_de_retirada': r.local_de_retirada,
