@@ -71,7 +71,7 @@ class Queries(str, Enum):
     '''
 
     get_cpf_hash = '''
-            select benef_cpf, hashId, benef_nome, resp_nome, cid, tipo_da_deficiencia_meta,
+            select benef_cpf, hashId, benef_nome, resp_nome, cid, tipo_da_deficiencia_meta, municipios_naturalidade_meta,
             fn_CALC_IDADE(benef_data_nasc) as idade, benef_telefone, local_de_retirada_meta,
             group_concat(channelId) as channelId,
             group_concat(alert_id) as alert_id,
