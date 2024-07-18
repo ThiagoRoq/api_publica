@@ -1198,7 +1198,7 @@ async def countRecepcao(cpf: Optional[str] = Query(None, alias='cpf'),
     
     parameters = {'cpf': cpf, 'alert_id': alert_id, 'nome': nome}
     try:
-        requests = get_recepcao(parameters)
+        requests = get_count_recepcao(parameters)
         return{
             'response': serialize_count_recepcao(requests)
         }
