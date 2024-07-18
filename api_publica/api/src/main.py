@@ -508,6 +508,11 @@ def serialize_recepcao(requests):
     'created_at': r.created_at
     }for r in requests]
 
+def serialize_count_recepcao(requests):
+    return [{
+        'count': r.count
+    }for r in requests]
+
 @app.get("/requests")
 async def requests(limit='100', offset='0', full='false'):
     requests = get_requests(int(limit), int(offset))
@@ -586,9 +591,9 @@ async def get_count_cpf(
         municipio_realizado_cadastro: Optional[str] = Query(None, alias='municipio_realizado_cadastro'),
         local_de_retirada: Optional[str] = Query(None, alias = 'local_de_retirada'),
         deficiencia: Optional[str] = Query(None, alias= 'deficiencia'),
-        start_date: Optional[int] = Query(None, alias='start_date'),
-        end_date: Optional[int] = Query(None, alias='end_date'),
-        especific_date: Optional[int] = Query(None, alias='especific_date')
+        start_date: Optional[str] = Query(None, alias='start_date'),
+        end_date: Optional[str] = Query(None, alias='end_date'),
+        especific_date: Optional[str] = Query(None, alias='especific_date')
 
 ):
     filters = {'view': view, 'cpf': cpf, 'nome': nome, 'nome_responsavel': nome_responsavel, 'cid': cid, 
@@ -1179,6 +1184,23 @@ async def solicitacaoRecepcao(order: str = Query(...),
         requests = get_recepcao(parameters)
         return{
             'response': serialize_recepcao(requests)
+        }
+    except (json.JSONDecodeError, AttributeError):
+        return {
+            'response': 'nenhum dado foi encontrado'
+        }
+
+@app.get("/count_recepcao")
+async def countRecepcao(cpf: Optional[str] = Query(None, alias='cpf'), 
+                        alert_id: Optional[int] = Query(None, alias='alert_id'), 
+                        nome: Optional[str] = Query(None, alias='nome')
+                              ):
+    
+    parameters = {'cpf': cpf, 'alert_id': alert_id, 'nome': nome}
+    try:
+        requests = get_recepcao(parameters)
+        return{
+            'response': serialize_count_recepcao(requests)
         }
     except (json.JSONDecodeError, AttributeError):
         return {
