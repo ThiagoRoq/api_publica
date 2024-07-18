@@ -432,6 +432,10 @@ class SolicitationRecepcao:
         self.carteirinha = carteirinha
         self.created_at = created_at
 
+class CountRecepcao:
+  def __init__(self, count) -> None:
+    self.count = count
+
 class SolicitationAlertRequest:
   def __init__(self, id, alert_id, benef_cpf, meta, attachments, statusId, channelId, tipo_carteira, updated_at, created_at) -> None:
     self.id = id
