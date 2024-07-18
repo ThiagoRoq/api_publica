@@ -170,6 +170,28 @@ def get_recepcao(filters:dict) -> List[SolicitationRecepcao]:
 
     return [SolicitationRecepcao(*req) for req in requests]        
 
+def get_count_recepcao(filters:dict) -> List[SolicitationRecepcao]:
+    query = Queries.get_count_recepcao
+    params = []
+    condition = ''
+    if filters.get('cpf'):
+        condition += "and benef_cpf = %s"
+        params.append(filters['cpf'])
+    if filters.get('alert_id'):
+        condition += "and alert_id = %s"
+        params.append(filters['alert_id'])
+    if filters.get('nome'):
+        condition += "and benef_nome like %s"
+        params.append('%'+filters['nome']+'%')
+
+    conn = get_conn()
+    cursor = conn.cursor()
+        
+    cursor.execute(query.format(conditions=condition), params)
+    requests = cursor.fetchall()
+
+    return [CountRecepcao(*req) for req in requests]
+
 def get_alert_events_by_cpf(cpf: str) -> List[AlertEventsBYCPF]:
     query = Queries.get_alert_events_by_cpf
     params = [cpf]
@@ -274,13 +296,13 @@ def get_hash(filters: dict) -> List[HashRequest]:
         condition += 'and lower(tipo_da_deficiencia_meta) like %s'
         params.append('%'+ filters['deficiencia'] + '%') 
     if filters.get('start_date'):
-        condition_group += " and DATE(max(created_at)) >= %s "
+        condition_group += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) >= %s "
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition_group += " and DATE(max(created_at)) <= %s "
+        condition_group += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) <= %s "
         params.append(filters['end_date'])
     if filters.get('especific_date'):
-        condition_group += " and DATE(max(created_at)) = %s "
+        condition_group += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) = %s "
         params.append(filters['especific_date'])
 
     params.append(filters['fim'])
