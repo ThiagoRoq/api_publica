@@ -52,7 +52,7 @@ class Queries(str, Enum):
     get_aprovados = '''
             select a.id, a.alert_id, a.numero_carteira, a.nome, a.municipios_beneficiario_meta, a.cpf, a.cid_beneficiario_meta, a.statusId, a.tipo_da_deficiencia_meta, 
             a.municipios_beneficiario_meta, 
-            UPPER(REPLACE(REGEXP_REPLACE(s.local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS s.local_de_retirada_meta, 
+            UPPER(REPLACE(REGEXP_REPLACE(s.local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
             a.foto_3x4, a.foto_digital, a.hashId, a.vencimento, a.expedicao, a.lote, a.auditor, a.statusId, 
             a.meta, s.tipo_carteira, a.created_at, a.updated_at
             from {projeto} a join solicitacoes s on a.alert_id=s.alert_id
