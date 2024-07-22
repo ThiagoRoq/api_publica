@@ -22,7 +22,9 @@ class Queries(str, Enum):
 
     get_solicitacoes = '''
             select id, alert_id, auditor, resp_nome, fn_CALC_IDADE(benef_data_nasc) as idade, cid, 
-            tipo_da_deficiencia_meta, local_de_retirada_meta, municipios_naturalidade_meta, meta, attachments, statusId, channelId, 
+            tipo_da_deficiencia_meta, 
+            UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
+            municipios_naturalidade_meta, meta, attachments, statusId, channelId, 
             tipo_carteira, external_id, created_at, updated_at
             from solicitacoes
             where {conditions} limit %s offset %s;
@@ -49,7 +51,9 @@ class Queries(str, Enum):
 
     get_aprovados = '''
             select a.id, a.alert_id, a.numero_carteira, a.nome, a.municipios_beneficiario_meta, a.cpf, a.cid_beneficiario_meta, a.statusId, a.tipo_da_deficiencia_meta, 
-            a.municipios_beneficiario_meta, s.local_de_retirada_meta, a.foto_3x4, a.foto_digital, a.hashId, a.vencimento, a.expedicao, a.lote, a.auditor, a.statusId, 
+            a.municipios_beneficiario_meta, 
+            UPPER(REPLACE(REGEXP_REPLACE(s.local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS s.local_de_retirada_meta, 
+            a.foto_3x4, a.foto_digital, a.hashId, a.vencimento, a.expedicao, a.lote, a.auditor, a.statusId, 
             a.meta, s.tipo_carteira, a.created_at, a.updated_at
             from {projeto} a join solicitacoes s on a.alert_id=s.alert_id
             where {conditions}
@@ -72,7 +76,8 @@ class Queries(str, Enum):
 
     get_cpf_hash = '''
             select benef_cpf, hashId, benef_nome, resp_nome, cid, tipo_da_deficiencia_meta, municipios_naturalidade_meta,
-            fn_CALC_IDADE(benef_data_nasc) as idade, benef_telefone, local_de_retirada_meta,
+            fn_CALC_IDADE(benef_data_nasc) as idade, benef_telefone, 
+            UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta,
             group_concat(channelId) as channelId,
             group_concat(alert_id) as alert_id,
             MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) AS last_created, 
@@ -89,7 +94,8 @@ class Queries(str, Enum):
     get_consulta_geral = '''
                 select benef_cpf,
                 hashId, benef_nome, group_concat(alert_id) as alert_ids,
-                tipo_da_deficiencia_meta, local_de_retirada_meta, 
+                tipo_da_deficiencia_meta, 
+                UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
                 municipios_naturalidade_meta, cid, group_concat(channelId) as channelIds,
                 max(created_at) as last_created, max(updated_at) as last_updated, count(*) as total
                 from solicitacoes
@@ -358,7 +364,9 @@ class Queries(str, Enum):
     '''
 
     get_solicitation_by_hashId = '''
-        select alert_id ,benef_cpf ,benef_nome ,benef_rg ,benef_data_nasc ,cid ,fator_rh ,resp_nome ,resp_rg ,benef_telefone, resp_telefone, meta, local_de_retirada_meta, municipios_naturalidade_meta, tipo_da_deficiencia_meta, external_id, created_at, tipo_carteira, statusId, channelId, attachments, resp_email
+        select alert_id ,benef_cpf ,benef_nome ,benef_rg ,benef_data_nasc ,cid ,fator_rh ,resp_nome ,resp_rg ,benef_telefone, resp_telefone, meta, 
+        UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
+        municipios_naturalidade_meta, tipo_da_deficiencia_meta, external_id, created_at, tipo_carteira, statusId, channelId, attachments, resp_email
         from solicitacoes s
         where hashId = %s
         order by created_at desc
@@ -367,7 +375,9 @@ class Queries(str, Enum):
         select alert_id, nome, cpf, carteira, maioridade_meta, nome_da_mae_meta, nome_do_pai_meta, 
         bairro_beneficiario_meta, tipo_carteira_meta, rg_responsavel_meta, cep_responsavel_meta, cpf_responsavel_meta,
         rg_beneficiario_meta, cep_beneficiario_meta, cid_beneficiario_meta, municipios_naturalidade_meta, 
-        cid2_beneficiario_meta, local_de_retirada_meta, bairro_responsavel_meta, numero_responsavel_meta, 
+        cid2_beneficiario_meta, 
+        UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
+        bairro_responsavel_meta, numero_responsavel_meta, 
         para_quem_cadastro_meta, numero_beneficiario_meta, motivo_2_via_meta, nome_do_beneficiario_meta, 
         municipio_responsavel_meta, endereco_do_responsavel_meta, municipios_beneficiario_meta, 
         rua_avenida_responsavel_meta, telefone_1_beneficiario_meta, telefone_2_beneficiario_meta, 
