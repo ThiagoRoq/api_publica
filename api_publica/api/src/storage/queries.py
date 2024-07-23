@@ -99,7 +99,7 @@ class Queries(str, Enum):
     get_consulta_geral = '''
                 select benef_cpf,
                 hashId, benef_nome, group_concat(alert_id) as alert_ids,
-                tipo_da_deficiencia_meta, 
+                tipo_da_deficiencia_meta, benef_telefone,
                 UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
                 UPPER(REPLACE(municipios_naturalidade_meta, '_', ' ')) AS municipios_naturalidade_meta, cid, group_concat(channelId) as channelIds,
                 max(created_at) as last_created, max(updated_at) as last_updated, count(*) as total
@@ -372,7 +372,8 @@ class Queries(str, Enum):
         select alert_id ,benef_cpf ,benef_nome ,benef_rg ,benef_data_nasc ,cid ,fator_rh ,resp_nome ,resp_rg ,benef_telefone, resp_telefone, meta, 
         UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
         UPPER(REPLACE(municipios_naturalidade_meta, '_', ' ')) AS municipios_naturalidade_meta, 
-        tipo_da_deficiencia_meta, external_id, created_at, tipo_carteira, statusId, channelId, attachments, resp_email
+        tipo_da_deficiencia_meta, external_id, created_at, tipo_carteira, statusId, channelId, attachments, resp_email, 
+        meta ->> '$.sexo_genero_beneficiario' as sexo_beneficiario
         from solicitacoes s
         where hashId = %s
         order by created_at desc
