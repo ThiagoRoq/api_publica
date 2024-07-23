@@ -69,13 +69,14 @@ class CountHashRequest:
     self.count = count
 
 class ConsultaGeralRequest:
-  def __init__(self, benef_cpf, hashId, benef_nome, alert_id, deficiencia, local_de_retirada, municipio,
+  def __init__(self, benef_cpf, hashId, benef_nome, alert_id, deficiencia, telefone, local_de_retirada, municipio,
                 cid, channelIds, last_created, last_updated, total):
     self.benef_cpf = benef_cpf
     self.hashId = hashId
     self.benef_nome = benef_nome
     self.alert_id = alert_id
     self.deficiencia = deficiencia
+    self.telefone = telefone
     self.local_de_retirada = local_de_retirada
     self.municipio = municipio
     self.cid = cid
@@ -492,7 +493,7 @@ class AlertEventsBYCPF:
     self.createdAt = createdAt
       
 class SolicitationByhashId:
-  def __init__(self, alert_id ,benef_cpf ,benef_nome ,benef_rg ,benef_data_nasc ,cid ,fator_rh ,resp_nome ,resp_rg , benef_telefone, resp_telefone, meta, local_de_retirada, municipios_naturalidade_meta, tipo_da_deficiencia_meta, external_id, created_at, tipo_carteira, statusId, channelId, attachments, resp_email) -> None:
+  def __init__(self, alert_id ,benef_cpf ,benef_nome ,benef_rg ,benef_data_nasc ,cid ,fator_rh ,resp_nome ,resp_rg , benef_telefone, resp_telefone, meta, local_de_retirada, municipios_naturalidade_meta, tipo_da_deficiencia_meta, external_id, created_at, tipo_carteira, statusId, channelId, attachments, resp_email, sexo_beneficiario) -> None:
     self.alert_id = alert_id
     self.benef_cpf = benef_cpf
     self.benef_nome = benef_nome
@@ -531,6 +532,7 @@ class SolicitationByhashId:
             self.doc_comprovante_endereco_responsavel_legal_anexo
         ) = self._extract_attachments_info(attachments)
     self.resp_email = resp_email
+    self.sexo_beneficiario = sexo_beneficiario
        
   def _extract_data_beneficiario(self, meta):
     try:
