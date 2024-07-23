@@ -74,6 +74,7 @@ def serialize_consulta_geral(requests):
         'benef_nome': r.benef_nome,
         'alert_id': r.alert_id,
         'deficiencia': r.deficiencia,
+        'telefone': r.telefone,
         'local_de_retirada': r.local_de_retirada,
         'municipio': r.municipio,
         'cid': r.cid,
@@ -390,7 +391,8 @@ def serialize_solicitation_by_hashId(requests):
        "doc_rg_responsavel_legal_verso_anexo": r.doc_rg_responsavel_legal_verso_anexo, 
        "doc_rg_responsavel_legal_frente_anexo": r.doc_rg_responsavel_legal_frente_anexo, 
        "doc_comprovante_endereco_responsavel_legal_anexo": r.doc_comprovante_endereco_responsavel_legal_anexo,
-       "resp_email": r.resp_email
+       "resp_email": r.resp_email,
+       "sexo_beneficiario": r.sexo_beneficiario
     }for r in requests]
 
 def serialize_history_by_alert_id(requests):
