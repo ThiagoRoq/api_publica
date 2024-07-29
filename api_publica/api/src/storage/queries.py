@@ -53,7 +53,8 @@ class Queries(str, Enum):
     get_aprovados = '''
             select a.id, a.alert_id, a.numero_carteira, a.nome, 
             UPPER(REPLACE(a.municipios_beneficiario_meta, '_', ' ')) AS municipios_beneficiario_meta, a.cpf, 
-            a.cid_beneficiario_meta, a.statusId, 
+            UPPER(REPLACE(a.cid_beneficiario_meta, '_', ' ')) AS cid_beneficiario_meta, 
+            a.statusId, 
             a.tipo_da_deficiencia_meta, 
             UPPER(REPLACE(a.municipios_beneficiario_meta, '_', ' ')) AS municipios_beneficiario_meta, 
             UPPER(REPLACE(REGEXP_REPLACE(s.local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
