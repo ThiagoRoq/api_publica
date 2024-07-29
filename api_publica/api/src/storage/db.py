@@ -359,13 +359,13 @@ def get_count_cpf_hash(filters: dict) -> List[CountHashRequest]:
         condition += 'and lower(tipo_da_deficiencia_meta) like %s'
         params.append('%'+ filters['deficiencia'] + '%')
     if filters.get('start_date'):
-        condition_group += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) >= %s "
+        condition += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) >= %s "
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition_group += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) <= %s "
+        condition += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) <= %s "
         params.append(filters['end_date'])
     if filters.get('especific_date'):
-        condition_group += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) = %s "
+        condition += " and MAX(DATE(CONVERT_TZ(created_at, '+00:00', '-04:00'))) = %s "
         params.append(filters['especific_date'])
 
     conn = get_conn()
