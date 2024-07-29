@@ -80,7 +80,9 @@ class Queries(str, Enum):
     '''
 
     get_cpf_hash = '''
-            select benef_cpf, hashId, benef_nome, resp_nome, cid, tipo_da_deficiencia_meta, 
+            select benef_cpf, hashId, benef_nome, resp_nome, 
+            UPPER(REPLACE(cid, '_', ' ')) AS cid, 
+            tipo_da_deficiencia_meta, 
             UPPER(REPLACE(municipios_naturalidade_meta, '_', ' ')) AS municipios_naturalidade_meta,
             fn_CALC_IDADE(benef_data_nasc) as idade, benef_telefone, 
             UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta,
