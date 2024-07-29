@@ -710,8 +710,8 @@ async def count_solicitacoes(
         deficiencia: Optional[str] = Query(None, alias='deficiencia'),
         local_retirada: Optional[str] = Query(None, alias='local_retirada'),
         projeto: Optional[str] = Query(None, alias='projeto'),
-        start_date: Optional[int] = Query(None, alias='start_dade'),
-        end_date: Optional[int] = Query(None, alias='end_date')
+        start_date: Optional[str] = Query(None, alias='start_dade'),
+        end_date: Optional[str] = Query(None, alias='end_date')
 ):
     filters = {'alert_id': alert_id, 'cpf': cpf, 'hashId': hashId, 'inicio': inicio, 'fim': fim,
                'nome': nome, 'cid': cid, 'deficiencia': deficiencia, 'local_retirada': local_retirada, 
