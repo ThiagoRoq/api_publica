@@ -458,6 +458,7 @@ def get_solicitacoes(filters: dict) -> List[SolicitationRequest]:
     query = Queries.get_solicitacoes
     condition = ''
     params = []
+    order = filters.get('order')
 
     if filters.get('status'):
         condition += "statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
@@ -487,6 +488,9 @@ def get_solicitacoes(filters: dict) -> List[SolicitationRequest]:
     if filters.get('local_retirada'):
         condition += " and lower(local_de_retirada_meta) like %s"
         params.append('%'+filters['local_retirada']+'%')
+    if filters.get('municipio'):
+        condition += " and lower(municipios_naturalidade_meta) like %s"
+        params.append('%'+filters['municipio']+'%')
     if filters.get('projeto'):
         projeto = filters['projeto']
         if projeto == 'PCD':
@@ -507,7 +511,7 @@ def get_solicitacoes(filters: dict) -> List[SolicitationRequest]:
     params.append(filters['inicio'])
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(query.format(conditions=condition), params)
+    cursor.execute(query.format(conditions=condition, order=order), params)
     requests = cursor.fetchall()
 
     return [SolicitationRequest(*req) for req in requests]
