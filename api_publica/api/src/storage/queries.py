@@ -28,7 +28,7 @@ class Queries(str, Enum):
             meta, attachments, statusId, channelId, 
             tipo_carteira, external_id, created_at, updated_at
             from solicitacoes
-            where {conditions} limit %s offset %s;
+            where {conditions} order by updated_at {order} limit %s offset %s;
     '''
 
     get_count_solicitacoes = '''
