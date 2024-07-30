@@ -591,7 +591,7 @@ def get_count_solicitacoes(filters: dict) -> List[CountSolicitationRequest]:
         condition += " and lower(local_de_retirada_meta) like %s"
         params.append('%'+filters['local_retirada']+'%')
     if filters.get('municipio'):
-        condition += " and lower(municipios_naturalidade_meta) like %s"
+        condition += " and lower(municipios_endereco_beneficiario_meta) like %s"
         params.append('%'+filters['municipio']+'%')
     if filters.get('projeto'):
         projeto = filters['projeto']
