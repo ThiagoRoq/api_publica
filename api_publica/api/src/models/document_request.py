@@ -401,7 +401,7 @@ class SolicitationHashId:
     self.hashId = hashId
 
 class SolicitationRequest:
-  def __init__(self, id, alert_id, auditor, resp_nome, idade, cid, deficiencia, local_retirada, municipio, meta, attachments, statusId, channelId, via, external_id, created_at, updated_at) -> None:
+  def __init__(self, id, alert_id, auditor, resp_nome, idade, cid, deficiencia, local_retirada, municipio_naturalidade, municipios_endereco, meta, attachments, statusId, channelId, via, external_id, created_at, updated_at) -> None:
     self.id = id
     self.alert_id = alert_id
     self.auditor = auditor
@@ -410,7 +410,8 @@ class SolicitationRequest:
     self.cid = cid
     self.deficiencia = deficiencia
     self.local_retirada = local_retirada
-    self.municipio = municipio
+    self.municipio_naturalidade = municipio_naturalidade
+    self.municipios_endereco = municipios_endereco
     self.meta = json.loads(meta)
     self.attachments = json.loads(attachments)
     self.statusId = statusId
@@ -422,7 +423,7 @@ class SolicitationRequest:
 
 class SolicitationRecepcao:
     def __init__(self, benef_cpf, hashId, nome, alert_id, tipo_da_deficiencia_meta, local_de_retirada, 
-                 municipios_naturalidade_meta, cid, carteirinha, created_at):
+                 municipios_naturalidade_meta, cid, carteirinha, status, created_at):
         self.benef_cpf = benef_cpf
         self.hashId = hashId
         self.nome = nome
@@ -432,6 +433,7 @@ class SolicitationRecepcao:
         self.municipios_naturalidade_meta = municipios_naturalidade_meta
         self.cid = cid
         self.carteirinha = carteirinha
+        self.status = status
         self.created_at = created_at
 
 class CountRecepcao:
