@@ -249,7 +249,8 @@ def serialize_solicitation_requests(requests):
         "cid": r.cid,
         "deficiencia": r.deficiencia,
         "local_retirada": r.local_retirada,
-        "municipio": r.municipio,
+        "municipio_naturalidade": r.municipio_naturalidade,
+        "municipios_endereco": r.municipios_endereco,
         "meta": r.meta,
         "attachments": r.attachments,
         "status_id": r.statusId,
@@ -508,6 +509,7 @@ def serialize_recepcao(requests):
     'municipios_naturalidade_meta': r.municipios_naturalidade_meta,
     'cid': r.cid,
     'carteirinha': r.carteirinha,
+    'status': r.status,
     'created_at': r.created_at
     }for r in requests]
 
