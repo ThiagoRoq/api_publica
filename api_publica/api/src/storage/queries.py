@@ -24,7 +24,8 @@ class Queries(str, Enum):
             select id, alert_id, auditor, resp_nome, fn_CALC_IDADE(benef_data_nasc) as idade, cid, 
             tipo_da_deficiencia_meta, 
             UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta, 
-            UPPER(REPLACE(municipios_naturalidade_meta, '_', ' ')) AS municipios_naturalidade_meta, 
+            UPPER(REPLACE(municipios_naturalidade_meta, '_', ' ')) AS municipios_naturalidade_meta,
+            UPPER(REPLACE(municipios_endereco_beneficiario_meta, '_', ' ')) AS municipios_endereco_beneficiario_meta, 
             meta, attachments, statusId, channelId, 
             tipo_carteira, external_id, created_at, updated_at
             from solicitacoes
@@ -443,7 +444,7 @@ class Queries(str, Enum):
     '''
 
     get_informations_recepcao = '''
-    select benef_cpf, hashId, UPPER(benef_nome) AS nome, alert_id, tipo_da_deficiencia_meta, UPPER(REPLACE(
+    benef_cpf, hashId, UPPER(benef_nome) AS nome, alert_id, tipo_da_deficiencia_meta, UPPER(REPLACE(
         TRIM(BOTH ' ' FROM REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+[ ]+', '')), 
         '_', 
         ' '
@@ -453,7 +454,36 @@ class Queries(str, Enum):
     CASE 
         WHEN channelId = 12837 THEN 'CIPTEA' 
         WHEN channelId = 12836 THEN 'PCD' 
-    END AS carteirinha, 
+    END AS carteirinha,
+    CASE 
+        WHEN statusId = 1 THEN 'Pericía Médica'
+        WHEN statusId = 2 THEN 'Registrado'
+        WHEN statusId = 3 THEN 'Aprovado'
+        WHEN statusId = 4 THEN 'Fechado'
+        WHEN statusId = 5 THEN 'Biometria'
+        WHEN statusId = 6 THEN 'Reprovado'
+        WHEN statusId = 7 THEN 'Emitidas SEPCD'
+        WHEN statusId = 8 THEN '2º Via'
+        WHEN statusId = 9 THEN 'Aguardando Impressão SEPCD'
+        WHEN statusId = 10 THEN 'Entregue'
+        WHEN statusId = 11 THEN 'Retificação'
+        WHEN statusId = 13 THEN 'Aprovado PAC'
+        WHEN statusId = 17 THEN 'Entregue PAC'
+        WHEN statusId = 18 THEN 'Emitidas Interior'
+        WHEN statusId = 19 THEN 'Entregue Interior'
+        WHEN statusId = 20 THEN 'Aprovado Interior'
+        WHEN statusId = 21 THEN 'Pendente'
+        WHEN statusId = 22 THEN 'Aguardando Envio'
+        WHEN statusId = 23 THEN 'Enviado Impressão'
+        WHEN statusId = 24 THEN 'Pronto para Retirada'
+        WHEN statusId = 25 THEN 'Cancelado'
+        WHEN statusId = 26 THEN 'Pré Aprovado'
+        WHEN statusId = 27 THEN 'Encaminhado para Gráfica'
+        WHEN statusId = 28 THEN 'Revisão de Carteira'
+        WHEN statusId = 29 THEN 'Emitidas PAC'
+        WHEN statusId = 30 THEN 'Aprovado Temporário'
+        ELSE 'Edição de Carteira'
+    END AS status,
     created_at
     FROM solicitacoes
     WHERE 1=1 {conditions}
