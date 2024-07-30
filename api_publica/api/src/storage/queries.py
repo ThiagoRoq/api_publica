@@ -444,7 +444,7 @@ class Queries(str, Enum):
     '''
 
     get_informations_recepcao = '''
-SELECT 
+    SELECT 
     benef_cpf, 
     hashId, 
     UPPER(benef_nome) AS nome, 
