@@ -650,6 +650,7 @@ async def solicitacoes(
         status: List[int] = Query(...),
         inicio: int = Query(...),
         fim: int = Query(...),
+        order: str = Query(...),
         alert_id: Optional[int] = Query(None, alias='alert_id'),
         cpf: Optional[str] = Query(None, alias='cpf'),
         hashId: Optional[str] = Query(None, alias='hashId'),
@@ -658,13 +659,15 @@ async def solicitacoes(
         cid: Optional[str] = Query(None, alias='cid'),
         deficiencia: Optional[str] = Query(None, alias='deficiencia'),
         local_retirada: Optional[str] = Query(None, alias='local_retirada'),
+        municipio: Optional[str] = Query(None, alias='municipio'),
         projeto: Optional[str] = Query(None, alias='projeto'),
         start_date: Optional[int] = Query(None, alias='start_dade'),
         end_date: Optional[int] = Query(None, alias='end_date')
 ):
-    filters = {'alert_id': alert_id, 'cpf': cpf, 'hashId': hashId, 'inicio': inicio, 'fim': fim,
+    filters = {'alert_id': alert_id, 'cpf': cpf, 'hashId': hashId, 'inicio': inicio, 'fim': fim, 'order':order,
                'nome': nome, 'nome_responsavel': nome_responsavel, 'cid': cid, 'deficiencia': deficiencia,
-               'local_retirada': local_retirada,'status': status, 'projeto': projeto, 
+               'local_retirada': local_retirada, 'municipio': municipio,
+               'status': status, 'projeto': projeto, 
                'start_date': start_date, 'end_date': end_date}
 
     requests = get_solicitacoes(filters=filters)
