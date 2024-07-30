@@ -444,7 +444,13 @@ class Queries(str, Enum):
     '''
 
     get_informations_recepcao = '''
-    benef_cpf, hashId, UPPER(benef_nome) AS nome, alert_id, tipo_da_deficiencia_meta, UPPER(REPLACE(
+SELECT 
+    benef_cpf, 
+    hashId, 
+    UPPER(benef_nome) AS nome, 
+    alert_id, 
+    tipo_da_deficiencia_meta, 
+    UPPER(REPLACE(
         TRIM(BOTH ' ' FROM REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+[ ]+', '')), 
         '_', 
         ' '
@@ -487,9 +493,9 @@ class Queries(str, Enum):
     created_at
     FROM solicitacoes
     WHERE 1=1 {conditions}
-    ORDER BY created_at {order} 
-    LIMIT %s 
-    OFFSET %s
+    ORDER BY created_at {order}
+    LIMIT {fim} 
+    OFFSET {inicio};
     '''
 
     get_count_recepcao = '''
