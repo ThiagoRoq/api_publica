@@ -494,8 +494,8 @@ class Queries(str, Enum):
     FROM solicitacoes
     WHERE 1=1 {conditions}
     ORDER BY created_at {order}
-    LIMIT {fim} 
-    OFFSET {inicio};
+    LIMIT %s
+    OFFSET %s;
     '''
 
     get_count_recepcao = '''
