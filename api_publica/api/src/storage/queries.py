@@ -765,8 +765,6 @@ class Queries(str, Enum):
     FROM solicitacoes
     WHERE 1=1 {conditions}
     ORDER BY created_at DESC;
-
-
     '''
 
     get_valida_carteira = '''
