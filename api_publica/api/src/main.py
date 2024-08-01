@@ -854,7 +854,7 @@ async def solicitations_export(
     filters = {'status': status, 'naturalidade': naturalidade, 
                'municipio': municipio, 'start_date': start_date, 'end_date': end_date}
     try:
-        filename = 'solicitacoes'
+        filename = 'solicitacoes.xlsx'
         buffer = solicitacoes_xlsx(filters)
 
         if buffer.getbuffer().nbytes == 0:
