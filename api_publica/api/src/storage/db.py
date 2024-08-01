@@ -649,10 +649,10 @@ def get_aprovados_pcd(filters: dict) -> List[ApprovedRequest]:
         condition += " and a.numero_carteira = %s"
         params.append(filters['carteira'])
     if filters.get('start_date'):
-        condition += " and cast(a.created_at as date) >= from_unixtime(%s/1000)"
+        condition += " and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += " and cast(a.created_at as date) <= from_unixtime(%s/1000)"
+        condition += " and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['end_date'])
     if filters.get('id'):
         condition += " and a.id > %s"
@@ -696,10 +696,10 @@ def get_aprovados_ciptea(filters: dict) -> List[ApprovedRequest]:
         condition += " and a.numero_carteira = %s"
         params.append(filters['carteira'])
     if filters.get('start_date'):
-        condition += " and cast(a.created_at as date) >= from_unixtime(%s/1000)"
+        condition += " and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += " and cast(a.created_at as date) <= from_unixtime(%s/1000)"
+        condition += " and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['end_date'])
     if filters.get('id'):
         condition += " and a.id > %s"
