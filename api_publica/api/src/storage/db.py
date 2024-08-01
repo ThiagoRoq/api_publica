@@ -900,6 +900,50 @@ def get_lote_xlsx(lote:int):
 
     return buffer
 
+def solicitacoes_xlsx(filters:dict):
+    query = Queries.get_solicitacoes_xlsx
+    params = []
+    condition = ''
+
+    if filters.get('status'):
+        condition+= "and statusId = %s"
+        params.append(filters.get('status'))
+    if filters.get('naturalidade'):
+        condition+="and municipios_naturalidade_meta LIKE %s"
+        params.append('%' + filters['naturalidade'] + '%')
+    if filters.get('municipio'):
+        condition+="and municipios_endereco_beneficiario_meta LIKE %s"
+        params.append('%' + filters['municipio'] + '%')
+    if filters.get('start_date'):
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
+        params.append(filters['start_date'])
+    if filters.get('end_date'):
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
+        params.append(filters['end_date'])
+    
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(query.format(conditions=condition), params)
+    result = cursor.fetchall()
+    df = pd.DataFrame(result)
+
+    df.columns = [
+            'Protocolo', 'CPF do Beneficiario', 'Nome do Beneficiário', 'RG do Beneficiário', 'CID do Beneficiário', 'Naturalidade do Beneficiário', 'Nome da Mãe', 
+            'Nome do Pai', 'Tipo Sanguíneo', 'Data de Nascimento', 'Genêro do Beneficiário', 'Estado Civil', 
+            'Nacionalidade', 'Orgão Expedidor', 'Município', 'Tipo Carteira', 'Motivo da 2ª via', 
+            'Local de Retirada', 'Endereço do Beneficiário', 'Nome do Responsável', 'CPF do Responsável', 'RG do Responsável', 'Email do Responsável', 'Endereço do Responsável',
+            'Status', 'Canal', 'Recebido'
+        ]
+    
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+
+    buffer.seek(0)
+
+    return buffer
+    
+
 def validar_campos_carteira(hashId: str)-> List[ValidarCarteiraHashId]:
     query = Queries.get_valida_carteira
     params = [hashId]
