@@ -434,7 +434,7 @@ class Queries(str, Enum):
         END AS via_meta, 
         email_meta
         FROM aprovados_ciptea 
-        WHERE lote = 249 
+        WHERE lote = %s
         ORDER BY updated_at DESC;
         '''
     
