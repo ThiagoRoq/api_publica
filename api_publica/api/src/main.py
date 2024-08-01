@@ -537,8 +537,8 @@ async def history(
         alert_id: Optional[int] = Query(None, alias='alert_id'),
         statusId: Optional[int] = Query(None, alias='statusId'),
         nome: Optional[str] = Query(None, alias='nome'),
-        start_date: Optional[int] = Query(None, alias='start_date'),
-        end_date: Optional[int] = Query(None, alias='end_date')
+        start_date: Optional[str] = Query(None, alias='start_date'),
+        end_date: Optional[str] = Query(None, alias='end_date')
 ):
     filter = {'alert_id': alert_id, 'statusId': statusId,'inicio': inicio, 'fim': fim,
               'cpf': cpf, 'order': order, 'nome': nome,
@@ -663,8 +663,8 @@ async def solicitacoes(
         local_retirada: Optional[str] = Query(None, alias='local_retirada'),
         municipio: Optional[str] = Query(None, alias='municipio'),
         projeto: Optional[str] = Query(None, alias='projeto'),
-        start_date: Optional[int] = Query(None, alias='start_dade'),
-        end_date: Optional[int] = Query(None, alias='end_date')
+        start_date: Optional[str] = Query(None, alias='start_dade'),
+        end_date: Optional[str] = Query(None, alias='end_date')
 ):
     filters = {'alert_id': alert_id, 'cpf': cpf, 'hashId': hashId, 'inicio': inicio, 'fim': fim, 'order':order,
                'nome': nome, 'nome_responsavel': nome_responsavel, 'cid': cid, 'deficiencia': deficiencia,
