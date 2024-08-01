@@ -843,6 +843,30 @@ async def lote_export(lote:int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/export_solicitacoes")
+async def solicitations_export(
+    status: Optional[int] = Query(None, alias='status'),
+    naturalidade: Optional[str] = Query(None, alias='naturalidade'),
+    municipio: Optional[str] = Query(None, alias='municipio'),
+    start_date: Optional[str] = Query(None, alias='start_date'),
+    end_date: Optional[str] = Query(None, alias='end_date')
+):
+    filters = {'status': status, 'naturalidade': naturalidade, 
+               'municipio': municipio, 'start_date': start_date, 'end_date': end_date}
+    try:
+        filename = 'solicitacoes'
+        buffer = solicitacoes_xlsx(filters)
+
+        if buffer.getbuffer().nbytes == 0:
+            raise HTTPException(status_code=400, detail="Lote não encontrado")
+        return StreamingResponse(
+            buffer,
+            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # comentario
 @app.get("/valida_carteirinha_hashId")
 async def validar_carteira(hashId: str):
