@@ -483,7 +483,7 @@ def serialize_solicitation_by_alert_id(requests):
 
 def serialize_solicitation_meta_alert_id(requests):
     return[{
-        "meta": r.meta
+        "meta": json.loads(r.meta)
     }for r in requests]
 
 def serialize_solicitation_old_cpf(requests):
