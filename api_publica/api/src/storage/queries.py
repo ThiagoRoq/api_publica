@@ -438,6 +438,337 @@ class Queries(str, Enum):
         ORDER BY updated_at DESC;
         '''
     
+    get_solicitacoes_xlsx = '''
+    SELECT 
+    alert_id, 
+    benef_cpf, 
+    UPPER(benef_nome) AS benef_nome, 
+    benef_rg, 
+    UPPER(REPLACE(cid, '_', ' ')) AS cid_beneficiario, 
+    UPPER(REPLACE(municipios_naturalidade_meta, '_', ' - ')) AS naturalidade_beneficiario, 
+    UPPER(nome_da_mae) AS nome_da_mae, 
+    UPPER(nome_do_pai) AS nome_do_pai, 
+    CASE fator_rh
+        WHEN 'o_positivo' THEN 'O+'
+        WHEN 'o_negativo' THEN 'O-'
+        WHEN 'a_positivo' THEN 'A+'
+        WHEN 'a_negativo' THEN 'A-'
+        WHEN 'b_positivo' THEN 'B+'
+        WHEN 'b_negativo' THEN 'B-'
+        WHEN 'ab_positivo' THEN 'AB+'
+        WHEN 'ab_negativo' THEN 'AB-'
+        ELSE fator_rh
+    END AS fator_rh, 
+    FormatDate(benef_data_nasc) AS data_nascimento, 
+    sexo_genero_beneficiario, 
+    estado_civil_beneficiario, 
+    nacionalidade_beneficiario, 
+    orgao_expedidor_beneficiario, 
+    UPPER(REPLACE(REGEXP_REPLACE(municipios_endereco_beneficiario_meta, '^[0-9]+_', ''), '_', ' ')) AS municipios_endereco_beneficiario_meta, 
+    CASE tipo_carteira
+        WHEN '1_via' THEN '1ª via'
+        WHEN '2_via' THEN '2ª via'
+        WHEN '1º' THEN '1ª via'
+        WHEN '2º' THEN '2ª via'
+        ELSE tipo_carteira
+    END AS tipo_carteira,
+    descricao_motivo_2via,
+    UPPER(REPLACE(REGEXP_REPLACE(local_de_retirada_meta, '^[0-9]+_', ''), '_', ' ')) AS local_de_retirada_meta,
+    UPPER(
+        COALESCE(
+            TRIM(CONCAT_WS(' ',
+                IF(avenidade_rua_beneficiario != '', avenidade_rua_beneficiario, NULL),
+                IF(numero_beneficiario != '', numero_beneficiario, NULL),
+                IF(bairro_beneficiario != '', 
+                    CONCAT(', ', 
+                        CASE bairro_beneficiario
+                            WHEN 'adrianopolis' THEN 'Adrianópolis'
+                            WHEN 'aleixo' THEN 'Aleixo'
+                            WHEN 'alvorada' THEN 'Alvorada'
+                            WHEN 'armando_mendes' THEN 'Armando Mendes'
+                            WHEN 'betania' THEN 'Betânia'
+                            WHEN 'cachoeirinha' THEN 'Cachoeirinha'
+                            WHEN 'centro' THEN 'Centro'
+                            WHEN 'chapada' THEN 'Chapada'
+                            WHEN 'cidade_de_deus' THEN 'Cidade de Deus'
+                            WHEN 'cidade_nova' THEN 'Cidade Nova'
+                            WHEN 'colonia_antonio_aleixo' THEN 'Colônia Antônio Aleixo'
+                            WHEN 'colonia_oliveira_machado' THEN 'Colônia Oliveira Machado'
+                            WHEN 'colonia_santo_antonio' THEN 'Colônia Santo Antônio'
+                            WHEN 'colonia_terra_nova' THEN 'Colônia Terra Nova'
+                            WHEN 'compensa' THEN 'Compensa'
+                            WHEN 'coroado' THEN 'Coroado'
+                            WHEN 'crespo' THEN 'Crespo'
+                            WHEN 'da_paz' THEN 'Da Paz'
+                            WHEN 'distrito_industrial_i' THEN 'Distrito Industrial I'
+                            WHEN 'distrito_industrial_ii' THEN 'Distrito Industrial II'
+                            WHEN 'dom_pedro' THEN 'Dom Pedro'
+                            WHEN 'educandos' THEN 'Educandos'
+                            WHEN 'flores' THEN 'Flores'
+                            WHEN 'gilberto_mestrinho' THEN 'Gilberto Mestrinho'
+                            WHEN 'gloria' THEN 'Glória'
+                            WHEN 'japiim' THEN 'Japiim'
+                            WHEN 'jorge_teixeira' THEN 'Jorge Teixeira'
+                            WHEN 'lago_azul' THEN 'Lago Azul'
+                            WHEN 'lirio_do_vale' THEN 'Lírio do Vale'
+                            WHEN 'mauazinho' THEN 'Mauazinho'
+                            WHEN 'monte_das_oliveiras' THEN 'Monte das Oliveiras'
+                            WHEN 'morro_da_liberdade' THEN 'Morro da Liberdade'
+                            WHEN 'nossa_senhora_aparecida' THEN 'Nossa Senhora Aparecida'
+                            WHEN 'nossa_senhora_das_gracas' THEN 'Nossa Senhora das Graças'
+                            WHEN 'nova_cidade' THEN 'Nova Cidade'
+                            WHEN 'nova_esperanca' THEN 'Nova Esperança'
+                            WHEN 'novo_aleixo' THEN 'Novo Aleixo'
+                            WHEN 'novo_israel' THEN 'Novo Israel'
+                            WHEN 'parque_10_denovembro' THEN 'Parque 10 de Novembro'
+                            WHEN 'petropolis' THEN 'Petrópolis'
+                            WHEN 'planalto' THEN 'Planalto'
+                            WHEN 'ponta_negra' THEN 'Ponta Negra'
+                            WHEN 'praca_14_de_janeiro' THEN 'Praça 14 de Janeiro'
+                            WHEN 'prediente_vargas' THEN 'Presidente Vargas'
+                            WHEN 'puraquequara' THEN 'Puraquequara'
+                            WHEN 'raiz' THEN 'Raiz'
+                            WHEN 'redencao' THEN 'Redenção'
+                            WHEN 'santa_etelvina' THEN 'Santa Etelvina'
+                            WHEN 'santa_luizia' THEN 'Santa Luzia'
+                            WHEN 'santo_agostinho' THEN 'Santo Agostinho'
+                            WHEN 'santo_antonio' THEN 'Santo Antônio'
+                            WHEN 'sao_francisco' THEN 'São Francisco'
+                            WHEN 'sao_geraldo' THEN 'São Geraldo'
+                            WHEN 'sao_jorge' THEN 'São Jorge'
+                            WHEN 'sao_jose_operario' THEN 'São José Operário'
+                            WHEN 'sao_lazaro' THEN 'São Lazaro'
+                            WHEN 'sao_raimundo' THEN 'São Raimundo'
+                            WHEN 'tancredo_neves' THEN 'Tancredo Neves'
+                            WHEN 'taruma' THEN 'Tarumã'
+                            WHEN 'taruma_acu' THEN 'Tarumã-Açu'
+                            WHEN 'vila_buriti' THEN 'Vila Buriti'
+                            WHEN 'vila_da_prata' THEN 'Vila da Prata'
+                            WHEN 'zumbi_dos_palmares' THEN 'Zumbi dos Palmares'
+                            WHEN 'santa_ines' THEN 'Santa Inês'
+                            WHEN 'joao_paulo' THEN 'João Paulo'
+                            ELSE bairro_beneficiario
+                        END
+                    ), 
+                NULL),
+                IF(cep_beneficiario != '', CONCAT('- ', cep_beneficiario), NULL)
+            )), ''
+        )
+    ) AS endereco_beneficiario,
+    nome_do_responsavel_legal_beneficiario, 
+    cpf_responsavel, 
+    resp_rg, 
+    resp_email, 
+    UPPER(
+        TRIM(
+            COALESCE(
+                IF(
+                    (rua_avenida_responsavel IS NULL OR rua_avenida_responsavel = '') AND
+                    (bairro_responsavel IS NULL OR bairro_responsavel = '') AND
+                    (cep_responsavel IS NULL OR cep_responsavel = ''),
+                    UPPER(
+                        COALESCE(
+                            TRIM(CONCAT_WS(' ',
+                                IF(avenidade_rua_beneficiario != '', avenidade_rua_beneficiario, NULL),
+                                IF(numero_beneficiario != '', numero_beneficiario, NULL),
+                                IF(bairro_beneficiario != '', 
+                                    CONCAT(', ', 
+                                        CASE bairro_beneficiario
+                                            WHEN 'adrianopolis' THEN 'Adrianópolis'
+                                            WHEN 'aleixo' THEN 'Aleixo'
+                                            WHEN 'alvorada' THEN 'Alvorada'
+                                            WHEN 'armando_mendes' THEN 'Armando Mendes'
+                                            WHEN 'betania' THEN 'Betânia'
+                                            WHEN 'cachoeirinha' THEN 'Cachoeirinha'
+                                            WHEN 'centro' THEN 'Centro'
+                                            WHEN 'chapada' THEN 'Chapada'
+                                            WHEN 'cidade_de_deus' THEN 'Cidade de Deus'
+                                            WHEN 'cidade_nova' THEN 'Cidade Nova'
+                                            WHEN 'colonia_antonio_aleixo' THEN 'Colônia Antônio Aleixo'
+                                            WHEN 'colonia_oliveira_machado' THEN 'Colônia Oliveira Machado'
+                                            WHEN 'colonia_santo_antonio' THEN 'Colônia Santo Antônio'
+                                            WHEN 'colonia_terra_nova' THEN 'Colônia Terra Nova'
+                                            WHEN 'compensa' THEN 'Compensa'
+                                            WHEN 'coroado' THEN 'Coroado'
+                                            WHEN 'crespo' THEN 'Crespo'
+                                            WHEN 'da_paz' THEN 'Da Paz'
+                                            WHEN 'distrito_industrial_i' THEN 'Distrito Industrial I'
+                                            WHEN 'distrito_industrial_ii' THEN 'Distrito Industrial II'
+                                            WHEN 'dom_pedro' THEN 'Dom Pedro'
+                                            WHEN 'educandos' THEN 'Educandos'
+                                            WHEN 'flores' THEN 'Flores'
+                                            WHEN 'gilberto_mestrinho' THEN 'Gilberto Mestrinho'
+                                            WHEN 'gloria' THEN 'Glória'
+                                            WHEN 'japiim' THEN 'Japiim'
+                                            WHEN 'jorge_teixeira' THEN 'Jorge Teixeira'
+                                            WHEN 'lago_azul' THEN 'Lago Azul'
+                                            WHEN 'lirio_do_vale' THEN 'Lírio do Vale'
+                                            WHEN 'mauazinho' THEN 'Mauazinho'
+                                            WHEN 'monte_das_oliveiras' THEN 'Monte das Oliveiras'
+                                            WHEN 'morro_da_liberdade' THEN 'Morro da Liberdade'
+                                            WHEN 'nossa_senhora_aparecida' THEN 'Nossa Senhora Aparecida'
+                                            WHEN 'nossa_senhora_das_gracas' THEN 'Nossa Senhora das Graças'
+                                            WHEN 'nova_cidade' THEN 'Nova Cidade'
+                                            WHEN 'nova_esperanca' THEN 'Nova Esperança'
+                                            WHEN 'novo_aleixo' THEN 'Novo Aleixo'
+                                            WHEN 'novo_israel' THEN 'Novo Israel'
+                                            WHEN 'parque_10_denovembro' THEN 'Parque 10 de Novembro'
+                                            WHEN 'petropolis' THEN 'Petrópolis'
+                                            WHEN 'planalto' THEN 'Planalto'
+                                            WHEN 'ponta_negra' THEN 'Ponta Negra'
+                                            WHEN 'praca_14_de_janeiro' THEN 'Praça 14 de Janeiro'
+                                            WHEN 'prediente_vargas' THEN 'Presidente Vargas'
+                                            WHEN 'puraquequara' THEN 'Puraquequara'
+                                            WHEN 'raiz' THEN 'Raiz'
+                                            WHEN 'redencao' THEN 'Redenção'
+                                            WHEN 'santa_etelvina' THEN 'Santa Etelvina'
+                                            WHEN 'santa_luizia' THEN 'Santa Luzia'
+                                            WHEN 'santo_agostinho' THEN 'Santo Agostinho'
+                                            WHEN 'santo_antonio' THEN 'Santo Antônio'
+                                            WHEN 'sao_francisco' THEN 'São Francisco'
+                                            WHEN 'sao_geraldo' THEN 'São Geraldo'
+                                            WHEN 'sao_jorge' THEN 'São Jorge'
+                                            WHEN 'sao_jose_operario' THEN 'São José Operário'
+                                            WHEN 'sao_lazaro' THEN 'São Lazaro'
+                                            WHEN 'sao_raimundo' THEN 'São Raimundo'
+                                            WHEN 'tancredo_neves' THEN 'Tancredo Neves'
+                                            WHEN 'taruma' THEN 'Tarumã'
+                                            WHEN 'taruma_acu' THEN 'Tarumã-Açu'
+                                            WHEN 'vila_buriti' THEN 'Vila Buriti'
+                                            WHEN 'vila_da_prata' THEN 'Vila da Prata'
+                                            WHEN 'zumbi_dos_palmares' THEN 'Zumbi dos Palmares'
+                                            WHEN 'santa_ines' THEN 'Santa Inês'
+                                            WHEN 'joao_paulo' THEN 'João Paulo'
+                                            ELSE bairro_beneficiario
+                                        END
+                                    ), 
+                                NULL),
+                                IF(cep_beneficiario != '', CONCAT('- ', cep_beneficiario), NULL)
+                            )), ''
+                        )
+                    ),
+                    CONCAT_WS(' ',
+                        IF(rua_avenida_responsavel != '', rua_avenida_responsavel, NULL),
+                        IF(bairro_responsavel != '', 
+                            CONCAT(', ', 
+                                CASE bairro_responsavel
+                                    WHEN 'adrianopolis' THEN 'Adrianópolis'
+                                    WHEN 'aleixo' THEN 'Aleixo'
+                                    WHEN 'alvorada' THEN 'Alvorada'
+                                    WHEN 'armando_mendes' THEN 'Armando Mendes'
+                                    WHEN 'betania' THEN 'Betânia'
+                                    WHEN 'cachoeirinha' THEN 'Cachoeirinha'
+                                    WHEN 'centro' THEN 'Centro'
+                                    WHEN 'chapada' THEN 'Chapada'
+                                    WHEN 'cidade_de_deus' THEN 'Cidade de Deus'
+                                    WHEN 'cidade_nova' THEN 'Cidade Nova'
+                                    WHEN 'colonia_antonio_aleixo' THEN 'Colônia Antônio Aleixo'
+                                    WHEN 'colonia_oliveira_machado' THEN 'Colônia Oliveira Machado'
+                                    WHEN 'colonia_santo_antonio' THEN 'Colônia Santo Antônio'
+                                    WHEN 'colonia_terra_nova' THEN 'Colônia Terra Nova'
+                                    WHEN 'compensa' THEN 'Compensa'
+                                    WHEN 'coroado' THEN 'Coroado'
+                                    WHEN 'crespo' THEN 'Crespo'
+                                    WHEN 'da_paz' THEN 'Da Paz'
+                                    WHEN 'distrito_industrial_i' THEN 'Distrito Industrial I'
+                                    WHEN 'distrito_industrial_ii' THEN 'Distrito Industrial II'
+                                    WHEN 'dom_pedro' THEN 'Dom Pedro'
+                                    WHEN 'educandos' THEN 'Educandos'
+                                    WHEN 'flores' THEN 'Flores'
+                                    WHEN 'gilberto_mestrinho' THEN 'Gilberto Mestrinho'
+                                    WHEN 'gloria' THEN 'Glória'
+                                    WHEN 'japiim' THEN 'Japiim'
+                                    WHEN 'jorge_teixeira' THEN 'Jorge Teixeira'
+                                    WHEN 'lago_azul' THEN 'Lago Azul'
+                                    WHEN 'lirio_do_vale' THEN 'Lírio do Vale'
+                                    WHEN 'mauazinho' THEN 'Mauazinho'
+                                    WHEN 'monte_das_oliveiras' THEN 'Monte das Oliveiras'
+                                    WHEN 'morro_da_liberdade' THEN 'Morro da Liberdade'
+                                    WHEN 'nossa_senhora_aparecida' THEN 'Nossa Senhora Aparecida'
+                                    WHEN 'nossa_senhora_das_gracas' THEN 'Nossa Senhora das Graças'
+                                    WHEN 'nova_cidade' THEN 'Nova Cidade'
+                                    WHEN 'nova_esperanca' THEN 'Nova Esperança'
+                                    WHEN 'novo_aleixo' THEN 'Novo Aleixo'
+                                    WHEN 'novo_israel' THEN 'Novo Israel'
+                                    WHEN 'parque_10_denovembro' THEN 'Parque 10 de Novembro'
+                                    WHEN 'petropolis' THEN 'Petrópolis'
+                                    WHEN 'planalto' THEN 'Planalto'
+                                    WHEN 'ponta_negra' THEN 'Ponta Negra'
+                                    WHEN 'praca_14_de_janeiro' THEN 'Praça 14 de Janeiro'
+                                    WHEN 'prediente_vargas' THEN 'Presidente Vargas'
+                                    WHEN 'puraquequara' THEN 'Puraquequara'
+                                    WHEN 'raiz' THEN 'Raiz'
+                                    WHEN 'redencao' THEN 'Redenção'
+                                    WHEN 'santa_etelvina' THEN 'Santa Etelvina'
+                                    WHEN 'santa_luizia' THEN 'Santa Luzia'
+                                    WHEN 'santo_agostinho' THEN 'Santo Agostinho'
+                                    WHEN 'santo_antonio' THEN 'Santo Antônio'
+                                    WHEN 'sao_francisco' THEN 'São Francisco'
+                                    WHEN 'sao_geraldo' THEN 'São Geraldo'
+                                    WHEN 'sao_jorge' THEN 'São Jorge'
+                                    WHEN 'sao_jose_operario' THEN 'São José Operário'
+                                    WHEN 'sao_lazaro' THEN 'São Lazaro'
+                                    WHEN 'sao_raimundo' THEN 'São Raimundo'
+                                    WHEN 'tancredo_neves' THEN 'Tancredo Neves'
+                                    WHEN 'taruma' THEN 'Tarumã'
+                                    WHEN 'taruma_acu' THEN 'Tarumã-Açu'
+                                    WHEN 'vila_buriti' THEN 'Vila Buriti'
+                                    WHEN 'vila_da_prata' THEN 'Vila da Prata'
+                                    WHEN 'zumbi_dos_palmares' THEN 'Zumbi dos Palmares'
+                                    WHEN 'santa_ines' THEN 'Santa Inês'
+                                    WHEN 'joao_paulo' THEN 'João Paulo'
+                                    ELSE bairro_responsavel
+                                END
+                            ), 
+                        NULL),
+                        IF(cep_responsavel != '', CONCAT('- ', cep_responsavel), NULL)
+                    )
+                ),
+                ''
+            )
+        )
+    ) AS endereco_responsavel,
+    CASE 
+        WHEN statusId = 1 THEN 'Pericía Médica'
+        WHEN statusId = 2 THEN 'Registrado'
+        WHEN statusId = 3 THEN 'Aprovado'
+        WHEN statusId = 4 THEN 'Fechado'
+        WHEN statusId = 5 THEN 'Biometria'
+        WHEN statusId = 6 THEN 'Reprovado'
+        WHEN statusId = 7 THEN 'Emitidas SEPCD'
+        WHEN statusId = 8 THEN '2º Via'
+        WHEN statusId = 9 THEN 'Aguardando Impressão SEPCD'
+        WHEN statusId = 10 THEN 'Entregue'
+        WHEN statusId = 11 THEN 'Retificação'
+        WHEN statusId = 13 THEN 'Aprovado PAC'
+        WHEN statusId = 17 THEN 'Entregue PAC'
+        WHEN statusId = 18 THEN 'Emitidas Interior'
+        WHEN statusId = 19 THEN 'Entregue Interior'
+        WHEN statusId = 20 THEN 'Aprovado Interior'
+        WHEN statusId = 21 THEN 'Pendente'
+        WHEN statusId = 22 THEN 'Aguardando Envio'
+        WHEN statusId = 23 THEN 'Enviado Impressão'
+        WHEN statusId = 24 THEN 'Pronto para Retirada'
+        WHEN statusId = 25 THEN 'Cancelado'
+        WHEN statusId = 26 THEN 'Pré Aprovado'
+        WHEN statusId = 27 THEN 'Encaminhado para Gráfica'
+        WHEN statusId = 28 THEN 'Revisão de Carteira'
+        WHEN statusId = 29 THEN 'Emitidas PAC'
+        WHEN statusId = 30 THEN 'Aprovado Temporário'
+        ELSE 'Edição de Carteira'
+    END AS status,
+        CASE 
+        WHEN channelId = 12837 THEN 'CIPTEA' 
+        WHEN channelId = 12836 THEN 'PCD' 
+    END AS Canal,
+    created_at
+    FROM solicitacoes
+    WHERE 1=1 {conditions}
+    ORDER BY created_at DESC;
+
+
+    '''
+
     get_valida_carteira = '''
         SELECT 
         UPPER(numero_carteira) AS numero_carteira, 
