@@ -918,7 +918,7 @@ def solicitacoes_xlsx(filters:dict):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s"
         params.append(filters['end_date'])
     
     conn = get_conn()
