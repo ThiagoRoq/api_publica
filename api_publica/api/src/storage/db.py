@@ -461,7 +461,7 @@ def get_solicitacoes(filters: dict) -> List[SolicitationRequest]:
     order = filters.get('order')
 
     if filters.get('status'):
-        condition += "statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
+        condition += " and statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
         for i in filters.get('status'):
             params.append(i)
     if filters.get('alert_id'):
@@ -566,7 +566,7 @@ def get_count_solicitacoes(filters: dict) -> List[CountSolicitationRequest]:
     params = []
 
     if filters.get('status'):
-        condition += "statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
+        condition += " and statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
         for i in filters.get('status'):
             params.append(i)
     if filters.get('alert_id'):
