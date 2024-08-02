@@ -845,7 +845,7 @@ async def lote_export(lote:int):
 
 @app.get("/export_solicitacoes")
 async def solicitations_export(
-    status: Optional[int] = Query(None, alias='status'),
+    status: List[int] = Query(None, alias='status'),
     naturalidade: Optional[str] = Query(None, alias='naturalidade'),
     municipio: Optional[str] = Query(None, alias='municipio'),
     start_date: Optional[str] = Query(None, alias='start_date'),
