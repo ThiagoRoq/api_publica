@@ -164,9 +164,10 @@ class Queries(str, Enum):
         WHEN 'ab_negativo' THEN 'AB-'
         ELSE tipo_sanguineo_beneficiario_meta
         END AS tipo_sanguineo_beneficiario_meta, 
-        UPPER(REPLACE(naturalidade_beneficiario_meta, '_', ' ')) AS naturalidade_beneficiario_meta, 
-        DATE(expedicao) AS expedicao, 
-        DATE(vencimento) AS vencimento, 
+        UPPER(REPLACE(naturalidade_beneficiario_meta, '_', ' ')) AS naturalidade_beneficiario_meta,
+        UPPER(REPLACE(municipios_beneficiario_meta, '_', ' ')) AS municipios_beneficiario_meta,
+        FormatDate(expedicao) AS expedicao, 
+        FormatDate(vencimento) AS vencimento, 
         UPPER(
         COALESCE(
             TRIM(CONCAT_WS(' ',
