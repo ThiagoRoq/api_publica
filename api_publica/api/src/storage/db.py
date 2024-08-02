@@ -906,8 +906,9 @@ def solicitacoes_xlsx(filters:dict):
     condition = ''
 
     if filters.get('status'):
-        condition+= "and statusId = %s"
-        params.append(filters.get('status'))
+        condition += " and statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
+        for i in filters.get('status'):
+            params.append(i)
     if filters.get('naturalidade'):
         condition+="and municipios_naturalidade_meta LIKE %s"
         params.append('%' + filters['naturalidade'] + '%')
