@@ -649,7 +649,7 @@ async def get_count_consultas_gerais(
 
 @app.get("/solicitacoes")
 async def solicitacoes(
-        status: List[int] = Query(...),
+        status: List[int] = Query(None, alias='status'),
         inicio: int = Query(...),
         fim: int = Query(...),
         order: str = Query(...),
@@ -704,7 +704,7 @@ async def solicitacao_alert(
 
 @app.get("/count_solicitacoes")
 async def count_solicitacoes(
-        status: List[int] = Query(...),
+        status: List[int] = Query(None, alias='status'),
         inicio: int = Query(...),
         fim: int = Query(...),
         alert_id: Optional[int] = Query(None, alias='alert_id'),
