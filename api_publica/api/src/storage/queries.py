@@ -29,13 +29,13 @@ class Queries(str, Enum):
             meta, attachments, statusId, channelId, 
             tipo_carteira, external_id, created_at, updated_at
             from solicitacoes
-            where {conditions} order by updated_at {order} limit %s offset %s;
+            where 1=1 {conditions} order by updated_at {order} limit %s offset %s;
     '''
 
     get_count_solicitacoes = '''
             select count(*) as count
             from solicitacoes
-            where {conditions} limit %s offset %s;
+            where 1=1 {conditions} limit %s offset %s;
     '''
 
     get_solicitacao_alert = '''
