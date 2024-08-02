@@ -427,10 +427,10 @@ class Queries(str, Enum):
         CONCAT('https://sejusc-pcd-ciptea-images.s3.sa-east-1.amazonaws.com/', foto_digital) AS foto_digital, 
         CONCAT('id.sejusc.am.gov.br/', hashId) as url_qr_code, 
         CASE via_meta
-                WHEN '1_via' THEN '1ªvia'
-                WHEN '2_via' THEN '2ªvia'
-                WHEN '1º' THEN '1ªvia'
-                WHEN '2º' THEN '2ªvia'
+                WHEN '1_via' THEN '1ª via'
+                WHEN '2_via' THEN '2ª via'
+                WHEN '1º' THEN '1ª via'
+                WHEN '2º' THEN '2ª via'
                 ELSE via_meta
         END AS via_meta, 
         email_meta
