@@ -887,7 +887,7 @@ def get_lote_xlsx(lote:int):
 
     df.columns = [
             'Número carteira', 'Lote', 'Nome do beneficiário', 'CPF', 'RG', 'CID', 'Data de nascimento', 
-            'Telefone beneficiário', 'Tipo sanguíneo', 'Naturalidade', 'Data de expedição', 'Data de validade', 
+            'Telefone beneficiário', 'Tipo sanguíneo', 'Naturalidade', 'Municipio', 'Data de expedição', 'Data de validade', 
             'Endereço do beneficiário', 'Filiação Mãe', 'Filiação Pai', 'Nome do responsável', 'RG do responsável', 
             'Telefone responsável', 'Endereço do responsável', 'Foto 3X4', 'Foto digital', 'URL do QRCODE', 'Via', 'E-mail'
         ]
