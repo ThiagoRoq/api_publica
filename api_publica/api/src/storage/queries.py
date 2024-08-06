@@ -762,8 +762,8 @@ class Queries(str, Enum):
         WHEN channelId = 12837 THEN 'CIPTEA' 
         WHEN channelId = 12836 THEN 'PCD' 
     END AS Canal,
-    created_at,
-    updated_at
+    FormatDate(created_at),
+    FormatDate(updated_at)
     FROM solicitacoes
     WHERE 1=1 {conditions}
     ORDER BY created_at DESC;
