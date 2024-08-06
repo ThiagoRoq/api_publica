@@ -933,7 +933,7 @@ def solicitacoes_xlsx(filters:dict):
             'Nome do Pai', 'Tipo Sanguíneo', 'Data de Nascimento', 'Genêro do Beneficiário', 'Estado Civil', 
             'Nacionalidade', 'Orgão Expedidor', 'Município', 'Tipo Carteira', 'Motivo da 2ª via', 
             'Local de Retirada', 'Endereço do Beneficiário', 'Nome do Responsável', 'CPF do Responsável', 'RG do Responsável', 'Email do Responsável', 'Endereço do Responsável',
-            'Status', 'Canal', 'Recebido'
+            'Status', 'Canal', 'Recebido', 'Última Modificação'
         ]
     
     buffer = io.BytesIO()
