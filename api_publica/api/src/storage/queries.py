@@ -762,7 +762,8 @@ class Queries(str, Enum):
         WHEN channelId = 12837 THEN 'CIPTEA' 
         WHEN channelId = 12836 THEN 'PCD' 
     END AS Canal,
-    created_at
+    created_at,
+    updated_at
     FROM solicitacoes
     WHERE 1=1 {conditions}
     ORDER BY created_at DESC;
@@ -988,7 +989,19 @@ class Queries(str, Enum):
     get_informations_carteirinha_pcd = '''
     select numero_carteira, UPPER(nome) as nome, foto_3x4, UPPER(REPLACE(bairro_beneficiario_meta, '_', ' ')) as bairro_beneficiario_meta, 
     numero_beneficiario_meta, UPPER(avenida_rua_beneficiario_meta) as avenida_rua_beneficiario_meta, 
-    cpf, expedicao, UPPER(cid_beneficiario_meta) as cid_beneficiario_meta, vencimento, tipo_da_deficiencia_meta, tipo_sanguineo_beneficiario_meta, rg_beneficiario_meta, telefone_beneficiario_meta, 
+    cpf, expedicao, UPPER(cid_beneficiario_meta) as cid_beneficiario_meta, vencimento, tipo_da_deficiencia_meta,
+    CASE tipo_sanguineo_beneficiario_meta
+    WHEN 'o_positivo' THEN 'O+'
+    WHEN 'o_negativo' THEN 'O-'
+    WHEN 'a_positivo' THEN 'A+'
+    WHEN 'a_negativo' THEN 'A-'
+    WHEN 'b_positivo' THEN 'B+'
+    WHEN 'b_negativo' THEN 'B-'
+    WHEN 'ab_positivo' THEN 'AB+'
+    WHEN 'ab_negativo' THEN 'AB-'
+    ELSE tipo_sanguineo_beneficiario_meta
+    END AS tipo_sanguineo_beneficiario_meta, 
+    rg_beneficiario_meta, telefone_beneficiario_meta, 
     UPPER(responsavel_legal_do_beneficiario_meta), telefone_responsavel_meta, SHA1(alert_id) as hash_alert_id, alert_id
     from aprovados_pcd 
     where alert_id = %s;
