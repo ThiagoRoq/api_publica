@@ -1028,7 +1028,7 @@ class Queries(str, Enum):
         '_', 
         ' '
     )) AS local_de_retirada, 
-    UPPER(REPLACE(municipios_naturalidade_meta, '_', ' ')) AS municipios_naturalidade_meta, 
+    UPPER(REPLACE(municipios_endereco_beneficiario_meta, '_', ' ')) AS municipios_endereco_beneficiario_meta, 
     UPPER(REPLACE(cid, '_', ' ')) AS cid, 
     CASE 
         WHEN channelId = 12837 THEN 'CIPTEA' 
