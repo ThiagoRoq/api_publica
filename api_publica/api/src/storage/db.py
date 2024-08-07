@@ -1374,9 +1374,9 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
     if filters['version'].upper() == 'DEV':
         condition+='1=1'    
     if filters.get('range_date'):
-        params = [date for date in filters['range_date']]
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
+        params = [date for date in filters['range_date']]
     if filters.get('especific_date'):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
         params = [filters['especific_date']]
