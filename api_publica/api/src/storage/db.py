@@ -1377,7 +1377,6 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
         params = [date for date in filters['range_date']]
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
-        params.append(filters['end_date'])
     if filters.get('especific_date'):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
         params = [filters['especific_date']]
