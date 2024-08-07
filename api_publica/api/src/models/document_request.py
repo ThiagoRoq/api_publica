@@ -819,6 +819,11 @@ class DocumentRequest:
     self.comments = data["comments"]
     self.data = data["data"]
 
+class Produtividade:
+  def __init__(self, auditor, quantidade, total) -> None:
+    self.auditor = auditor
+    self.quantidade = quantidade
+    self.total = total
 
   def update(self, status, data):
     if status in documentRequestStatus:
