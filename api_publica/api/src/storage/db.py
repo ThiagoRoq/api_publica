@@ -1368,15 +1368,16 @@ def update_request(request: DocumentRequest):
 def get_produtividade(filters: dict) -> List[Produtividade]:
     query = Queries.get_produtividade
     condition = ''
+    params = []
 
     if filters['version'].upper() == 'PROD':
         condition+= 'h.auditor not in ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA")'
     if filters['version'].upper() == 'DEV':
-        condition+='1=1'    
+        condition+='auditor is not null'    
     if filters.get('range_date'):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
-        params = [date for date in filters['range_date']]
+        params = filters['range_date'].split(',')
     if filters.get('especific_date'):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
         params = [filters['especific_date']]
