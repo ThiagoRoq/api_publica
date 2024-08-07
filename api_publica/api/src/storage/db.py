@@ -1386,6 +1386,5 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(query.format(conditions=condition), params)
-    conn.commit()
     requests = cursor.fetchall()
     return [Produtividade(*req) for req in requests]
