@@ -1369,6 +1369,10 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
     query = Queries.get_produtividade
     condition = ''
 
+    if filters['version'].upper() == 'PROD':
+        condition+= 'h.auditor not in ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA")'
+    if filters['version'].upper() == 'DEV':
+        condition+='1=1'    
     if filters.get('range_date'):
         params = [date for date in filters['range_date']]
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
