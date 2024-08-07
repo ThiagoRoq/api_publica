@@ -1090,7 +1090,6 @@ class Queries(str, Enum):
     inner join pcd.status st on
         st.id = h.statusId
     where
-    h.auditor not in ('CLEUZIANE','GABRIEL MARTINS', 'RAFAEL', 'RAFAEL BRAGA', 'SISTEMA')
     {conditions}
     group by
         h.auditor,
