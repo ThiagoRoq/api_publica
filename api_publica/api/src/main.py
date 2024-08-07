@@ -1251,11 +1251,12 @@ async def countRecepcao(cpf: Optional[str] = Query(None, alias='cpf'),
 
 @app.get("/produtividade")
 async def getProdutividade(
+    version: ['str'] = Query(...),
     range_date: Optional['str'] = Query(None, alias='range_date'),
     especific_date: Optional['str'] = Query(None, alias='especific_date')
     ):
     parameters = {
-        'range_date': range_date, 'especific_date': especific_date
+        'version': version, 'range_date': range_date, 'especific_date': especific_date
     }
 
     try:
