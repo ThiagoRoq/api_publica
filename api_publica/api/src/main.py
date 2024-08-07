@@ -518,6 +518,13 @@ def serialize_count_recepcao(requests):
         'count': r.count
     }for r in requests]
 
+def serialize_produtividade(requests):
+    return [{
+        'auditor': r.auditor,
+        'quantidade': r.quantidade,
+        'total': r.total
+    }for r in requests]
+
 @app.get("/requests")
 async def requests(limit='100', offset='0', full='false'):
     requests = get_requests(int(limit), int(offset))
@@ -1235,6 +1242,26 @@ async def countRecepcao(cpf: Optional[str] = Query(None, alias='cpf'),
         requests = get_count_recepcao(parameters)
         return{
             'response': serialize_count_recepcao(requests)
+        }
+    except (json.JSONDecodeError, AttributeError):
+        return {
+            'response': 'nenhum dado foi encontrado'
+        }
+    
+
+@app.get("/produtividade")
+async def getProdutividade(
+    range_date: Optional['str'] = Query(None, alias='range_date'),
+    especific_date: Optional['str'] = Query(None, alias='especific_date')
+    ):
+    parameters = {
+        'range_date': range_date, 'especific_date': especific_date
+    }
+
+    try:
+        requests = get_produtividade(parameters)
+        return {
+            'response': serialize_produtividade(requests)
         }
     except (json.JSONDecodeError, AttributeError):
         return {
