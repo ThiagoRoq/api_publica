@@ -41,7 +41,7 @@ def get_db_credentials():
     secret = secrets_manager.get_secret_value(SecretId=secret_arn)
 
     return {
-        "host": 'rds-pcd-prod.cluster-c4irymq85uhb.sa-east-1.rds.amazonaws.com',
+        "host": 'rds-dev-test-cluster.cluster-c4irymq85uhb.sa-east-1.rds.amazonaws.com',
         "user": json.loads(secret['SecretString'])['username'],
         "password": json.loads(secret['SecretString'])['password'],
     }
@@ -1364,3 +1364,25 @@ def update_request(request: DocumentRequest):
   cursor = conn.cursor()
   cursor.execute(query, params)
   conn.commit()
+
+def get_produtividade(filters: dict) -> List[Produtividade]:
+    query = Queries.get_produtividade
+    condition = ''
+
+    if filters.get('range_date'):
+        params = [date for date in filters['range_date']]
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
+        params.append(filters['end_date'])
+    if filters.get('especific_date'):
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
+        params = [filters['especific_date']]
+
+    
+    conn = get_conn()
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(query.format(conditions=condition), params)
+    conn.commit()
+    requests = cursor.fetchall()
+    return [Produtividade(*req) for req in requests]
