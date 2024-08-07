@@ -1074,3 +1074,30 @@ class Queries(str, Enum):
     get_count_recepcao = '''
     select count(*) from solicitacoes where 1=1 {conditions}
     '''
+
+    get_produtividade = '''
+    select
+    upper(auditor) as Auditor,
+    group_concat(concat(status_id, ':', Quantidade) order by Quantidade desc separator ',') as 'Quantidade por Status',
+    sum(Quantidade) as Total
+    from (
+    select
+        h.auditor,
+        st.id as status_id,
+        count(*) as Quantidade
+    from
+        pcd.historico h
+    inner join pcd.status st on
+        st.id = h.statusId
+    where
+    h.auditor not in ('CLEUZIANE','GABRIEL MARTINS', 'RAFAEL', 'RAFAEL BRAGA', 'SISTEMA')
+    {conditions}
+    group by
+        h.auditor,
+        st.name
+    ) as subquery
+    group by
+        auditor
+    order by
+        Auditor
+    '''
