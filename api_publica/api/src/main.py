@@ -619,6 +619,38 @@ async def get_count_cpf(
         "requests": serialize_count_hash(requests)
     }
 
+@app.get("/arquivados")
+async def get_cpf(
+        order: str,
+        inicio: int,
+        fim: int,
+        status: List[int] = Query(...),
+        cpf: Optional[str] = Query(None, alias='cpf'),
+        nome: Optional[str] = Query(None, alias='nome'),
+        nome_responsavel: Optional[str] = Query(None, alias='nome_responsavel'),
+        cid: Optional[str] = Query(None, alias='cid'),
+        alert_id: Optional[str] = Query(None, alias='alert_id'),
+        projeto: Optional[str] = Query(None, alias='projeto'),
+        via: Optional[str] = Query(None, alias='via'),
+        municipio_realizado_cadastro: Optional[str] = Query(None, alias='municipio_realizado_cadastro'),
+        local_de_retirada: Optional[str] = Query(None, alias = 'local_de_retirada'),
+        deficiencia: Optional[str] = Query(None, alias= 'deficiencia'),
+        start_date: Optional[str] = Query(None, alias='start_date'),
+        end_date: Optional[str] = Query(None, alias='end_date'),
+        especific_date: Optional[str] = Query(None, alias='especific_date')
+):
+    filters = {'order': order, 'inicio': inicio, 'fim': fim, 'status': status, 'cpf': cpf, 
+    'nome': nome, 'nome_responsavel': nome_responsavel, 'cid': cid, 'alert_id': alert_id, 
+    'projeto': projeto, 'via': via, 'municipio_realizado_cadastro': municipio_realizado_cadastro,
+    'local_de_retirada': local_de_retirada, 'deficiencia': deficiencia, 
+    'start_date': start_date, 'end_date': end_date, 'especific_date': especific_date}
+    
+    requests = get_arquivados(filters=filters)
+
+    return {
+        "requests": serialize_hash(requests)
+    }
+
 @app.get("/consulta_geral")
 async def get_consultas_gerais(
         filtro: str,
