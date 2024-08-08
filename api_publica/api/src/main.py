@@ -674,7 +674,7 @@ async def get_count_cpf(
     'local_de_retirada': local_de_retirada, 'deficiencia': deficiencia,
     'start_date': start_date, 'end_date': end_date, 'especific_date': especific_date}
 
-    requests = get_count_cpf_hash(filters=filters)
+    requests = get_count_arquivados(filters=filters)
 
     return {
         "requests": serialize_count_hash(requests)
