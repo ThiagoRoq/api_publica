@@ -1384,7 +1384,7 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
             params.append(date)
     if filters.get('especific_date'):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
-        params = [filters['especific_date']]
+        params.append(filters['especific_date'])
 
     
     conn = get_conn()
