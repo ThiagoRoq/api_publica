@@ -1376,7 +1376,7 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
         condition+='auditor is not null'
     if filters.get('auditor'):
         condition+='and h.auditor = %s'
-        params.append(filters.get['auditor'])
+        params.append(filters['auditor'])
     if filters.get('range_date'):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
