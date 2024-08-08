@@ -1257,7 +1257,8 @@ async def getProdutividade(
     especific_date: Optional[str] = Query(None, alias='especific_date')
     ):
     parameters = {
-        'version': version, 'range_date': range_date, 'especific_date': especific_date
+        'version': version, 'auditor': auditor, 
+        'range_date': range_date, 'especific_date': especific_date
     }
 
     try:
