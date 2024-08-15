@@ -266,6 +266,11 @@ def serialize_solicitation_hashid(requests):
         "hashId": r.hashId
     } for r in requests]
 
+def serialize_aprovados_alert_id(requests):
+    return[{
+        "alert_id": r.alert_id
+    }for r in requests]
+
 def serialize_solicitation_alert_requests(requests):
     return [{
         "id": r.id,
@@ -754,6 +759,15 @@ async def solicitacao_hashId(
 
     return {
         "requests": serialize_solicitation_hashid(requests)
+    }
+
+@app.get("/aprovados_alert_id")
+async def aprovados_alert_id(
+    hash_id: str
+):
+    requests = get_aprovados_alert_id(hash_id=hash_id)
+    return{
+        "requests": serialize_aprovados_alert_id(requests)
     }
 
 @app.get("/solicitacao_alert")
