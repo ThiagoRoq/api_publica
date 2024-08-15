@@ -38,6 +38,12 @@ class Queries(str, Enum):
             where 1=1 {conditions} limit %s offset %s;
     '''
 
+    get_count_solicitacoes_new = '''
+        select count(*) as count
+        from solicitacoes
+        where 1=1 {conditions}
+    '''
+
     get_solicitacao_alert = '''
             select id, alert_id, benef_cpf, meta, attachments,
                    statusId, channelId, tipo_carteira, updated_at, created_at
