@@ -763,6 +763,30 @@ def get_count_solicitacoes_new(filters:dict):
         condition += " and statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
         for i in filters.get('status'):
             params.append(i)
+    if filters.get('alert_id'):
+        condition += ' and alert_id=%s'
+        params.append(filters['alert_id'])
+    if filters.get('cpf'):
+        condition += " and benef_cpf like %s"
+        params.append(filters['cpf'])
+    if filters.get('hashId'):
+        condition += " and hashId=%s "
+        params.append(filters['hashId'])
+    if filters.get('nome'):
+        condition += " and lower(benef_nome) like %s"
+        params.append('%'+filters['nome']+'%')
+    if filters.get('cid'):
+        condition += " and lower(cid) like %s"
+        params.append('%'+filters['cid']+'%')
+    if filters.get('deficiencia'):
+        condition += " and lower(tipo_da_deficiencia_meta) like %s"
+        params.append('%'+filters['deficiencia']+'%')
+    if filters.get('local_retirada'):
+        condition += " and lower(local_de_retirada_meta) like %s"
+        params.append('%'+filters['local_retirada']+'%')
+    if filters.get('municipio'):
+        condition += " and lower(municipios_endereco_beneficiario_meta) like %s"
+        params.append('%'+filters['municipio']+'%')
     if filters.get('projeto'):
         projeto = filters['projeto']
         if projeto == 'PCD':
@@ -775,7 +799,6 @@ def get_count_solicitacoes_new(filters:dict):
     if filters.get('end_date'):
         condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s"
         params.append(filters['end_date'])
-
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(query.format(conditions=condition), params)
