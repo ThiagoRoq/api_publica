@@ -812,7 +812,7 @@ async def count_solicitacoes(
         "requests": serialize_count_solicitation_requests(requests)
     }
 
-app.get("/count_solicitacoes_teste")
+@app.get("/count_solicitacoes_new")
 async def count_solicitacoes_new(
         status: List[int] = Query(None, alias='status'),
         projeto: Optional[str] = Query(None, alias='projeto'),                   
