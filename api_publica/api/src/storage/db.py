@@ -578,6 +578,16 @@ def get_solicitation_hashid(benef_cpf: str) -> List[SolicitationHashId]:
 
     return [SolicitationHashId(*req) for req in requests]
 
+def get_aprovados_alert_id(hash_id: str):
+    query = Queries.get_aprovados_ciptea_alert_id
+    params = [hash_id]
+
+    conn = get_conn()
+    cursor= conn.cursor()
+    cursor.execute(query, params)
+    requests = cursor.fetchall()
+    return [AprovadoAlertId(*req) for req in requests]
+
 def get_solicitacoes(filters: dict) -> List[SolicitationRequest]:
 
     query = Queries.get_solicitacoes
