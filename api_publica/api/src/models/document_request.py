@@ -399,6 +399,11 @@ class LastNumberApproved:
 class SolicitationHashId:
   def __init__(self, hashId):
     self.hashId = hashId
+  
+
+class AprovadoAlertId:
+  def __init__(self, alert_id) -> None:
+    self.alert_id = alert_id
 
 class SolicitationRequest:
   def __init__(self, id, alert_id, auditor, resp_nome, idade, cid, deficiencia, local_retirada, municipio_naturalidade, municipios_endereco, meta, attachments, statusId, channelId, via, external_id, created_at, updated_at) -> None:
