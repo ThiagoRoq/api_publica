@@ -735,10 +735,10 @@ def get_count_solicitacoes(filters: dict) -> List[CountSolicitationRequest]:
         else:
             condition += " and channelId in (12837, 6790, 6744)"
     if filters.get('start_date'):
-        condition += " and cast(created_at as date) >= from_unixtime(%s/1000) "
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += " and cast(created_at as date) <= from_unixtime(%s/1000) "
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['end_date'])
     if filters.get('id'):
         condition += " and id > %s"
