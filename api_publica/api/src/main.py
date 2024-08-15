@@ -798,7 +798,7 @@ async def count_solicitacoes(
         local_retirada: Optional[str] = Query(None, alias='local_retirada'),
         municipio: Optional[str] = Query(None, alias='municipio'),
         projeto: Optional[str] = Query(None, alias='projeto'),
-        start_date: Optional[str] = Query(None, alias='start_dade'),
+        start_date: Optional[str] = Query(None, alias='start_date'),
         end_date: Optional[str] = Query(None, alias='end_date')
 ):
     filters = {'alert_id': alert_id, 'cpf': cpf, 'hashId': hashId, 'inicio': inicio, 'fim': fim,
@@ -807,6 +807,22 @@ async def count_solicitacoes(
                'start_date': start_date, 'end_date': end_date}
 
     requests = get_count_solicitacoes(filters=filters)
+
+    return {
+        "requests": serialize_count_solicitation_requests(requests)
+    }
+
+app.get("count_solicitacoes_new")
+async def count_solicitacoes_new(
+        status: List[int] = Query(None, alias='status'),
+        projeto: Optional[str] = Query(None, alias='projeto'),                   
+        start_date: Optional[str] = Query(None, alias='start_date'),
+        end_date: Optional[str] = Query(None, alias='end_date')):
+    filters = {
+        'status': status, 'projeto': projeto, 'start_date': start_date, 'end_date': end_date
+    }
+
+    requests = get_count_solicitacoes_new(filters)
 
     return {
         "requests": serialize_count_solicitation_requests(requests)
