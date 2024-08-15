@@ -50,6 +50,9 @@ class Queries(str, Enum):
                 from solicitacoes
                 where benef_cpf=%s
         '''
+    get_aprovados_ciptea_alert_id = '''
+    select alert_id from aprovados_ciptea where hashId = %s
+    '''
 
     get_aprovados = '''
             select a.id, a.alert_id, a.numero_carteira, a.nome, 
