@@ -753,6 +753,35 @@ def get_count_solicitacoes(filters: dict) -> List[CountSolicitationRequest]:
 
     return [CountSolicitationRequest(*req) for req in requests]
 
+def get_count_solicitacoes_new(filters:dict):
+    
+    query = Queries.get_count_solicitacoes_new
+    condition = ''
+    params = []
+
+    if filters.get('status'):
+        condition += " and statusId in ({})".format(", ".join(["%s"] * len(filters.get('status'))))
+        for i in filters.get('status'):
+            params.append(i)
+    if filters.get('projeto'):
+        projeto = filters['projeto']
+        if projeto == 'PCD':
+            condition += " and channelId in (12836, 4499, 4495)"
+        else:
+            condition += " and channelId in (12837, 6790, 6744)"
+    if filters.get('start_date'):
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
+        params.append(filters['start_date'])
+    if filters.get('end_date'):
+        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s"
+        params.append(filters['end_date'])
+
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(query.format(conditions=condition), params)
+    requests = cursor.fetchall()
+
+    return [CountSolicitationRequest(*req) for req in requests]
 
 def get_aprovados_pcd(filters: dict) -> List[ApprovedRequest]:
 
