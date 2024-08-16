@@ -419,7 +419,7 @@ class AprovedCIPTEA:
         self.rg_responsavel_meta = rg_responsavel_meta
         self.email_meta = email_meta
         self.telefone_responsavel_meta = telefone_responsavel_meta
-        self.endereco_responsavel = endereco_responsavel
+        self.endereco_responsavel = endereco_responsavel if endereco_responsavel != None else endereco_beneficiario
         self.foto_digital = f'https://sejusc-pcd-ciptea-images.s3.sa-east-1.amazonaws.com/{foto_digital}' if foto_digital != None else None
         self.url_qr_code = url_qr_code
 
