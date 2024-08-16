@@ -392,6 +392,53 @@ class InformationsCarteirinhaCIPTEA(BaseModel):
         return informations_dict
 
 
+class AprovedCIPTEA:
+  def __init__(self, numero_carteira, foto_3x4, nome, cpf, rg_beneficiario_meta, 
+                 cid_beneficiario, data_de_nascimento, telefone_beneficiario_meta, 
+                 tipo_sanguineo_beneficiario_meta, naturalidade_beneficiario, 
+                 expedicao, vencimento, endereco_beneficiario,  
+                 filiacao, 
+                 nome_responsavel_legal_do_beneficiario_meta, rg_responsavel_meta, 
+                 email_meta, telefone_responsavel_meta, endereco_responsavel, 
+                 foto_digital, url_qr_code):
+        self.numero_carteira = numero_carteira
+        self.foto_3x4 = self._verify_image(foto_3x4) if foto_3x4 != None else None
+        self.nome = nome
+        self.cpf = cpf
+        self.rg_beneficiario_meta = rg_beneficiario_meta
+        self.cid_beneficiario = cid_beneficiario
+        self.data_de_nascimento = data_de_nascimento
+        self.telefone_beneficiario_meta = telefone_beneficiario_meta
+        self.tipo_sanguineo_beneficiario_meta = tipo_sanguineo_beneficiario_meta
+        self.naturalidade_beneficiario = naturalidade_beneficiario
+        self.expedicao = expedicao
+        self.vencimento = vencimento
+        self.endereco_beneficiario = endereco_beneficiario
+        self.filiacao = filiacao
+        self.nome_responsavel_legal_do_beneficiario_meta = nome_responsavel_legal_do_beneficiario_meta
+        self.rg_responsavel_meta = rg_responsavel_meta
+        self.email_meta = email_meta
+        self.telefone_responsavel_meta = telefone_responsavel_meta
+        self.endereco_responsavel = endereco_responsavel
+        self.foto_digital = f'https://sejusc-pcd-ciptea-images.s3.sa-east-1.amazonaws.com/{foto_digital}' if foto_digital != None else None
+        self.url_qr_code = url_qr_code
+
+  def _verify_image(self, image):
+    url_s3 = 'https://sejusc-pcd-ciptea-images.s3.sa-east-1.amazonaws.com/{image}'
+    url_monitoramento = 'https://sa-east-1-uploads.s3.amazonaws.com/100760000427/attachments/image/{image}'
+        
+    image_s3 = url_s3.format(image=image)
+    response = requests.head(image_s3)
+    
+    if response.status_code == 200:
+        return image_s3
+    elif response.status_code == 403:
+        # Se o status code for 403, tenta a segunda URL
+        return url_monitoramento.format(image=image)
+    else:
+        # Se o status code não for 200 ou 403, retorne uma mensagem ou trate o erro conforme necessário
+        return f"Imagem não encontrada ou acesso negado, status code: {response.status_code}"
+
 class LastNumberApproved:
   def __init__(self, last_number):
     self.last_number = last_number
