@@ -1054,8 +1054,8 @@ class Queries(str, Enum):
     ELSE tipo_sanguineo_beneficiario_meta
     END AS tipo_sanguineo_beneficiario_meta, 
     UPPER(REPLACE(naturalidade_beneficiario_meta, '_', ' ')) AS naturalidade_beneficiario, 
-    expedicao, 
-    vencimento, 
+    FormatDate(expedicao), 
+    FormatDate(vencimento), 
     UPPER(
         COALESCE(
             TRIM(CONCAT_WS(' ',
