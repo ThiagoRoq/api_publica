@@ -38,12 +38,6 @@ class Queries(str, Enum):
             where 1=1 {conditions} limit %s offset %s;
     '''
 
-    get_count_solicitacoes_new = '''
-        select count(*) as count
-        from solicitacoes
-        where 1=1 {conditions}
-    '''
-
     get_solicitacao_alert = '''
             select id, alert_id, benef_cpf, meta, attachments,
                    statusId, channelId, tipo_carteira, updated_at, created_at
@@ -1017,12 +1011,80 @@ class Queries(str, Enum):
     '''
 
     get_informations_carteirinha_ciptea = '''
-    select numero_carteira, UPPER(nome) as nome, foto_3x4, foto_digital, UPPER(REPLACE(bairro_beneficiario_meta, '_', ' ')) as bairro_beneficiario_meta, 
+    select numero_carteira, 
+    UPPER(nome) as nome, 
+    foto_3x4, foto_digital, UPPER(REPLACE(bairro_beneficiario_meta, '_', ' ')) as bairro_beneficiario_meta, 
     numero_beneficiario_meta, UPPER(avenida_rua_beneficiario_meta) as avenida_rua_beneficiario_meta, 
-    cpf, expedicao, UPPER(cid_beneficiario_meta) as cid_beneficiario_meta, vencimento, tipo_sanguineo_beneficiario_meta, rg_beneficiario_meta, telefone_beneficiario_meta, 
+    cpf, expedicao, UPPER(cid_beneficiario_meta) as cid_beneficiario_meta, vencimento,
+    CASE tipo_sanguineo_beneficiario_meta
+    WHEN 'o_positivo' THEN 'O+'
+    WHEN 'o_negativo' THEN 'O-'
+    WHEN 'a_positivo' THEN 'A+'
+    WHEN 'a_negativo' THEN 'A-'
+    WHEN 'b_positivo' THEN 'B+'
+    WHEN 'b_negativo' THEN 'B-'
+    WHEN 'ab_positivo' THEN 'AB+'
+    WHEN 'ab_negativo' THEN 'AB-'
+    ELSE tipo_sanguineo_beneficiario_meta
+    END AS tipo_sanguineo_beneficiario_meta, rg_beneficiario_meta, telefone_beneficiario_meta, 
     UPPER(responsavel_legal_do_beneficiario_meta), telefone_responsavel_meta, email_meta, SHA1(alert_id) as hash_alert_id, alert_id
     from aprovados_ciptea 
     where alert_id = %s;
+    '''
+
+    get_aproved_ciptea = '''
+    SELECT 
+    numero_carteira, 
+    foto_3x4, 
+    UPPER(nome) AS nome, 
+    cpf, 
+    rg_beneficiario_meta, 
+    UPPER(REPLACE(cid_beneficiario_meta, '_', ' ')) AS cid_beneficiario, 
+    data_de_nascimento, 
+    telefone_beneficiario_meta, 
+    CASE tipo_sanguineo_beneficiario_meta
+    WHEN 'o_positivo' THEN 'O+'
+    WHEN 'o_negativo' THEN 'O-'
+    WHEN 'a_positivo' THEN 'A+'
+    WHEN 'a_negativo' THEN 'A-'
+    WHEN 'b_positivo' THEN 'B+'
+    WHEN 'b_negativo' THEN 'B-'
+    WHEN 'ab_positivo' THEN 'AB+'
+    WHEN 'ab_negativo' THEN 'AB-'
+    ELSE tipo_sanguineo_beneficiario_meta
+    END AS tipo_sanguineo_beneficiario_meta, 
+    UPPER(REPLACE(naturalidade_beneficiario_meta, '_', ' ')) AS naturalidade_beneficiario, 
+    expedicao, 
+    vencimento, 
+    UPPER(
+        COALESCE(
+            TRIM(CONCAT_WS(' ',
+                    IF(avenida_rua_beneficiario_meta != '', avenida_rua_beneficiario_meta, NULL),
+                    IF(numero_beneficiario_meta != '', numero_beneficiario_meta, NULL),
+                    IF(bairro_beneficiario_meta != '', CONCAT(', ', bairro_beneficiario_meta), NULL),
+                    IF(cep_beneficiario_meta != '', CONCAT('- ', cep_beneficiario_meta), NULL)
+                )), ''
+            )
+        ) AS endereco_beneficiario,  
+        CONCAT(
+        UPPER(nome_da_mae_meta),
+        IF(nome_do_pai_meta != '', CONCAT(', ', UPPER(nome_do_pai_meta)), '')
+    ) AS filiacao, 
+        UPPER(nome_responsavel_legal_do_beneficiario_meta), 
+        rg_responsavel_meta, 
+        email_meta, 
+        telefone_responsavel_meta, 
+        COALESCE(
+            TRIM(CONCAT_WS(' ',
+                IF(rua_avenida_responsavel_meta != '', rua_avenida_responsavel_meta, NULL),
+                IF(bairro_responsavel_meta != '', CONCAT(', ', bairro_responsavel_meta), NULL),
+                IF(cep_responsavel_meta != '', CONCAT('- ', cep_responsavel_meta), NULL)
+            )), ''
+        ) AS endereco_responsavel, 
+        foto_digital,
+        CONCAT('id.sejusc.am.gov.br/', hashId) AS url_qr_code
+    FROM aprovados_ciptea
+    WHERE alert_id = %s ORDER BY created_at DESC LIMIT 1
     '''
 
     get_informations_recepcao = '''
