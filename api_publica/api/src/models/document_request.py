@@ -432,12 +432,9 @@ class AprovedCIPTEA:
     
     if response.status_code == 200:
         return image_s3
-    elif response.status_code == 403:
+    elif response.status_code != 200:
         # Se o status code for 403, tenta a segunda URL
         return url_monitoramento.format(image=image)
-    else:
-        # Se o status code não for 200 ou 403, retorne uma mensagem ou trate o erro conforme necessário
-        return f"Imagem não encontrada ou acesso negado, status code: {response.status_code}"
 
 class LastNumberApproved:
   def __init__(self, last_number):
