@@ -478,6 +478,11 @@ def serialize_history_modified_by_alert_id(requests):
     "benef_endereco_completo": r.benef_endereco_completo_modified
     }for r in requests]
 
+def serialize_aproved_ciptea(requests):
+    return [{
+
+    }for r in requests]
+
 def serialize_solicitation_by_alert_id(requests):
     return [{
     "alert_id": r.alert_id,
@@ -485,6 +490,31 @@ def serialize_solicitation_by_alert_id(requests):
     "benef_nome": r.benef_nome,
     "attachments": r.attachments
     }for r in requests]
+
+def serialize_aproved_ciptea(requests):
+    return [{
+        "numero_carteira": r.numero_carteira,
+        "foto_3x4": r.foto_3x4,
+        "nome": r.nome,
+        "cpf": r.cpf,
+        "rg_beneficiario_meta": r.rg_beneficiario_meta,
+        "cid_beneficiario": r.cid_beneficiario,
+        "data_de_nascimento": r.data_de_nascimento,
+        "telefone_beneficiario_meta": r.telefone_beneficiario_meta,
+        "tipo_sanguineo_beneficiario_meta": r.tipo_sanguineo_beneficiario_meta,
+        "naturalidade_beneficiario": r.naturalidade_beneficiario,
+        "expedicao": r.expedicao,
+        "vencimento": r.vencimento,
+        "endereco_beneficiario": r.endereco_beneficiario,
+        "filiacao": r.filiacao,
+        "nome_responsavel_legal_do_beneficiario_meta": r.nome_responsavel_legal_do_beneficiario_meta,
+        "rg_responsavel_meta": r.rg_responsavel_meta,
+        "email_meta": r.email_meta,
+        "telefone_responsavel_meta": r.telefone_responsavel_meta,
+        "endereco_responsavel": r.endereco_responsavel,
+        "foto_digital": r.foto_digital,
+        "url_qr_code": r.url_qr_code
+    } for r in requests]
 
 def serialize_solicitation_meta_alert_id(requests):
     return[{
@@ -812,32 +842,6 @@ async def count_solicitacoes(
         "requests": serialize_count_solicitation_requests(requests)
     }
 
-@app.get("/count_solicitacoes_new")
-async def count_solicitacoes_new(
-        status: List[int] = Query(None, alias='status'),
-        alert_id: Optional[int] = Query(None, alias='alert_id'),
-        cpf: Optional[str] = Query(None, alias='cpf'),
-        hashId: Optional[str] = Query(None, alias='hashId'),
-        nome: Optional[str] = Query(None, alias='nome'),
-        cid: Optional[str] = Query(None, alias='cid'),
-        deficiencia: Optional[str] = Query(None, alias='deficiencia'),
-        local_retirada: Optional[str] = Query(None, alias='local_retirada'),
-        municipio: Optional[str] = Query(None, alias='municipio'),
-        projeto: Optional[str] = Query(None, alias='projeto'),
-        start_date: Optional[str] = Query(None, alias='start_date'),
-        end_date: Optional[str] = Query(None, alias='end_date')
-):
-    filters = {'alert_id': alert_id, 'cpf': cpf, 'hashId': hashId, 'nome': nome, 
-               'cid': cid, 'deficiencia': deficiencia, 'local_retirada': local_retirada,
-               'municipio': municipio, 'status': status, 'projeto': projeto, 
-               'start_date': start_date, 'end_date': end_date}
-
-    requests = get_count_solicitacoes_new(filters)
-
-    return {
-        "requests": serialize_count_solicitation_requests(requests)
-    }
-
 @app.get("/aprovados")
 async def pcd(
         projeto: str = Query(...),
@@ -1077,6 +1081,17 @@ async def informations_carteirinha(
     except:
         raise HTTPException(status_code=404, detail="alert_id not found")
 
+@app.get("/informations_ciptea")
+async def informations_ciptea(
+    alert_id: int
+):
+    try:
+        requests = get_aproved_ciptea(alert_id)
+        return {
+            'response': serialize_aproved_ciptea(requests)
+        }
+    except:
+        raise HTTPException(status_code=404, detail='alert_id not found')
 
 @app.get("/attachments_edicao")
 async def attachments_get(alert_id: int):
