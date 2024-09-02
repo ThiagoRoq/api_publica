@@ -780,10 +780,10 @@ def get_aprovados_pcd(filters: dict) -> List[ApprovedRequest]:
         condition += " and a.numero_carteira = %s"
         params.append(filters['carteira'])
     if filters.get('start_date'):
-        condition += f" and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
+        condition += f" and DATE(CONVERT_TZ(a.{filters['orientation_date']}, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += f" and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
+        condition += f" and DATE(CONVERT_TZ(a.{filters['orientation_date']}, '+00:00', '-04:00')) >= %s"
         params.append(filters['end_date'])
 
     params.append(filters['fim'])
@@ -824,12 +824,12 @@ def get_aprovados_ciptea(filters: dict) -> List[ApprovedRequest]:
         condition += " and a.numero_carteira = %s"
         params.append(filters['carteira'])
     if filters.get('start_date'):
-        condition += " and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
+        condition += f" and DATE(CONVERT_TZ(a.{filters['orientation_date']}, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += " and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
+        condition += f" and DATE(CONVERT_TZ(a.{filters['orientation_date']}, '+00:00', '-04:00')) >= %s"
         params.append(filters['end_date'])
-
+        
     params.append(filters['fim'])
     params.append(filters['inicio'])
     conn = get_conn()
