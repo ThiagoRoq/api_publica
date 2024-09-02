@@ -857,12 +857,16 @@ async def pcd(
         municipio: Optional[str] = Query(None, alias='municipio'),
         local_de_retirada: Optional[str] = Query(None, alias='local_de_retirada'),
         start_date: Optional[str] = Query(None, alias='start_date'),
-        end_date: Optional[str] = Query(None, alias='end_date')
+        end_date: Optional[str] = Query(None, alias='end_date'),
+        orientation_date: Optional[str] = Query(None, alias='operation_date')
 ):
     filters = {'status': status, 'order': order, 'inicio': inicio, 'fim': fim, 'alert_id': alert_id, 'id': id,
                'carteira': carteira, 'cpf': cpf, 'nome': nome, 'municipio': municipio, "local_de_retirada": local_de_retirada,
-               'start_date': start_date, 'end_date': end_date}
-
+               'start_date': start_date, 'end_date': end_date, 'orientation_date': orientation_date}
+    
+    if (start_date or end_date) and not orientation_date:
+        raise HTTPException(status_code=400, detail="orientation_date is required when start_date or end_date are provided")
+    
     if projeto == 'PCD':
         requests = get_aprovados_pcd(filters=filters)
     elif projeto == 'CIPTEA':
