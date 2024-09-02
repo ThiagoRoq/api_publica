@@ -829,9 +829,6 @@ def get_aprovados_ciptea(filters: dict) -> List[ApprovedRequest]:
     if filters.get('end_date'):
         condition += " and DATE(CONVERT_TZ(a.created_at, '+00:00', '-04:00')) >= %s"
         params.append(filters['end_date'])
-    if filters.get('id'):
-        condition += " and a.id > %s"
-        params.append(filters['id'])
 
     params.append(filters['fim'])
     params.append(filters['inicio'])
