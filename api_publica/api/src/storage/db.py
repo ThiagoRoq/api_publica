@@ -41,7 +41,7 @@ def get_db_credentials():
     secret = secrets_manager.get_secret_value(SecretId=secret_arn)
 
     return {
-        "host": 'rds-pcd-prod.cluster-c4irymq85uhb.sa-east-1.rds.amazonaws.com',
+        "host": 'rds-dev-test-cluster.cluster-c4irymq85uhb.sa-east-1.rds.amazonaws.com',
         "user": json.loads(secret['SecretString'])['username'],
         "password": json.loads(secret['SecretString'])['password'],
     }
@@ -867,10 +867,10 @@ def get_count_aprovados_pcd(filters: dict) -> List[CountApprovedRequest]:
         condition += " and numero_carteira = %s"
         params.append(filters['carteira'])
     if filters.get('start_date'):
-        condition += " and cast(created_at as date) >= from_unixtime(%s/1000)"
+        condition += f" and DATE(CONVERT_TZ({filters['orientation_date']}, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += " and cast(created_at as date) <= from_unixtime(%s/1000)"
+        condition += f" and DATE(CONVERT_TZ({filters['orientation_date']}, '+00:00', '-04:00')) <= %s"
         params.append(filters['end_date'])
     if filters.get('id'):
         condition += " and id > %s"
@@ -1228,10 +1228,10 @@ def get_count_aprovados_ciptea(filters: dict) -> List[CountApprovedRequest]:
         condition += " and numero_carteira = %s"
         params.append(filters['carteira'])
     if filters.get('start_date'):
-        condition += " and cast(created_at as date) >= from_unixtime(%s/1000)"
+        condition += f" and DATE(CONVERT_TZ({filters['orientation_date']}, '+00:00', '-04:00')) >= %s"
         params.append(filters['start_date'])
     if filters.get('end_date'):
-        condition += " and cast(created_at as date) <= from_unixtime(%s/1000)"
+        condition += f" and DATE(CONVERT_TZ({filters['orientation_date']}, '+00:00', '-04:00')) <= %s"
         params.append(filters['end_date'])
     if filters.get('id'):
         condition += " and id > %s"
