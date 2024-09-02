@@ -857,7 +857,7 @@ async def pcd(
         local_de_retirada: Optional[str] = Query(None, alias='local_de_retirada'),
         start_date: Optional[str] = Query(None, alias='start_date'),
         end_date: Optional[str] = Query(None, alias='end_date'),
-        orientation_date: Optional[str] = Query(None, alias='operation_date')
+        orientation_date: Optional[str] = Query(None, alias='orientation_date')
 ):
     filters = {'status': status, 'order': order, 'inicio': inicio, 'fim': fim, 'alert_id': alert_id, 'id': id,
                'carteira': carteira, 'cpf': cpf, 'nome': nome, 'municipio': municipio, "local_de_retirada": local_de_retirada,
