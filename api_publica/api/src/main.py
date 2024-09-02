@@ -850,7 +850,6 @@ async def pcd(
         inicio: int = Query(...),
         fim: int = Query(...),
         alert_id: Optional[int] = Query(None, alias='alert_id'),
-        id: Optional[int] = Query(None, alias='id'),
         carteira: Optional[int] = Query(None, alias='carteira'),
         cpf: Optional[str] = Query(None, alias='cpf'),
         nome: Optional[str] = Query(None, alias='nome'),
