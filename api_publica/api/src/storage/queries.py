@@ -1155,7 +1155,7 @@ class Queries(str, Enum):
     SELECT
         a.auditor,
         st.id AS status_id,
-        COUNT(h.statusId) AS Quantidade
+        IFNULL(COUNT(h.statusId), 0) AS Quantidade  -- Usar IFNULL para garantir que 0 seja retornado
     FROM
         (SELECT DISTINCT auditor FROM pcd.historico) a
     CROSS JOIN pcd.status st
@@ -1168,7 +1168,8 @@ class Queries(str, Enum):
     ) AS subquery
     WHERE {conditions}
     GROUP BY
-    auditor
+        auditor
     ORDER BY
-    Auditor;
+        Auditor;
+
     '''
