@@ -1510,10 +1510,10 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
     if filters['is_dev']:  # Verifica se é ambiente de desenvolvimento
         condition += 'auditor is not null'
     else:  # Se não for ambiente dev, estamos em produção
-        condition += 'h.auditor NOT IN ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA", "", "THIAGO ROQUE")'
+        condition += 'auditor NOT IN ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA", "", "THIAGO ROQUE")'
     
     if filters.get('auditor'):
-        condition += ' AND h.auditor = %s'
+        condition += ' AND auditor = %s'
         params.append(filters['auditor'])
     
     if filters.get('range_date'):
