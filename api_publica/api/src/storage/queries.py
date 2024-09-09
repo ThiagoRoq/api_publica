@@ -1147,27 +1147,28 @@ class Queries(str, Enum):
     '''
 
     get_produtividade = '''
-    select
-    upper(auditor) as Auditor,
-    group_concat(concat(status_id, ':', Quantidade) order by Quantidade desc separator ',') as 'Quantidade por Status',
-    sum(Quantidade) as Total
-    from (
-    select
-        h.auditor,
-        st.id as status_id,
-        count(*) as Quantidade
-    from
-        pcd.historico h
-    inner join pcd.status st on
-        st.id = h.statusId
-    where
-    {conditions}
-    group by
-        h.auditor,
-        st.name
-    ) as subquery
-    group by
-        auditor
-    order by
-        Auditor
+    SELECT
+    UPPER(auditor) AS Auditor,
+    GROUP_CONCAT(CONCAT(status_id, ':', IFNULL(Quantidade, 0)) ORDER BY status_id ASC SEPARATOR ',') AS 'Quantidade por Status',
+    SUM(IFNULL(Quantidade, 0)) AS Total
+    FROM (
+    SELECT
+        a.auditor,
+        st.id AS status_id,
+        COUNT(h.statusId) AS Quantidade
+    FROM
+        (SELECT DISTINCT auditor FROM pcd.historico) a
+    CROSS JOIN pcd.status st
+    LEFT JOIN pcd.historico h 
+        ON h.auditor = a.auditor 
+        AND h.statusId = st.id
+    GROUP BY
+        a.auditor,
+        st.id
+    ) AS subquery
+    WHERE {conditions}
+    GROUP BY
+    auditor
+    ORDER BY
+    Auditor;
     '''
