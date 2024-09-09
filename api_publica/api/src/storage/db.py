@@ -1507,26 +1507,28 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
     condition = ''
     params = []
 
-    if filters['version'].upper() == 'PROD':
-        condition+= 'h.auditor not in ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA", "", "THIAGO ROQUE")'
-    if filters['version'].upper() == 'DEV':
-        condition+='auditor is not null'
+    if filters['is_dev']:  # Verifica se é ambiente de desenvolvimento
+        condition += 'auditor is not null'
+    else:  # Se não for ambiente dev, estamos em produção
+        condition += 'h.auditor NOT IN ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA", "", "THIAGO ROQUE")'
+    
     if filters.get('auditor'):
-        condition+=' and h.auditor = %s'
+        condition += ' AND h.auditor = %s'
         params.append(filters['auditor'])
+    
     if filters.get('range_date'):
-        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
-        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
+        condition += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
+        condition += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
         for date in filters['range_date'].split(','):
             params.append(date)
+    
     if filters.get('especific_date'):
-        condition += " and DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
+        condition += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
         params.append(filters['especific_date'])
 
-    
-    conn = get_conn()
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(query.format(conditions=condition), params)
     requests = cursor.fetchall()
     return [Produtividade(*req) for req in requests]
+
