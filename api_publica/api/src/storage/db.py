@@ -1508,7 +1508,7 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
     params = []
 
     if filters['version'].upper() == 'PROD':
-        condition+= 'h.auditor not in ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA")'
+        condition+= 'h.auditor not in ("CLEUZIANE","GABRIEL MARTINS", "RAFAEL", "RAFAEL BRAGA", "", "THIAGO ROQUE")'
     if filters['version'].upper() == 'DEV':
         condition+='auditor is not null'
     if filters.get('auditor'):
