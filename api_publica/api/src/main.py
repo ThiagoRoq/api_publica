@@ -1375,19 +1375,20 @@ async def countRecepcao(cpf: Optional[str] = Query(None, alias='cpf'),
 
 @app.get("/produtividade")
 async def getProdutividade(
-    request: Request,
+    request: Request,  # Adiciona o request
     auditor: Optional[str] = Query(None, alias='auditor'),
     range_date: Optional[str] = Query(None, alias='range_date'),
     especific_date: Optional[str] = Query(None, alias='especific_date')
     ):
-
-    if 'dev' in request.url.hostname:
-        version = 'DEV'
-    else: version = 'PROD'
     
+    # Verifica se o request veio do ambiente de desenvolvimento
+    is_dev = "dev" in request.url.hostname
+
     parameters = {
-        'version': version, 'auditor': auditor, 
-        'range_date': range_date, 'especific_date': especific_date
+        'auditor': auditor, 
+        'range_date': range_date, 
+        'especific_date': especific_date,
+        'is_dev': is_dev  # Agora passamos se é dev ou não
     }
 
     try:
