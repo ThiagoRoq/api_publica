@@ -10,7 +10,7 @@ from fastapi.params import Body
 from storage import *
 
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Query, File, UploadFile
+from fastapi import FastAPI, HTTPException, Query, File, UploadFile, Request
 from fastapi.responses import StreamingResponse
 
 import json
@@ -1375,11 +1375,16 @@ async def countRecepcao(cpf: Optional[str] = Query(None, alias='cpf'),
 
 @app.get("/produtividade")
 async def getProdutividade(
-    version: str = Query(...),
+    request: Request,
     auditor: Optional[str] = Query(None, alias='auditor'),
     range_date: Optional[str] = Query(None, alias='range_date'),
     especific_date: Optional[str] = Query(None, alias='especific_date')
     ):
+
+    if 'dev' in request.url.hostname:
+        version = 'DEV'
+    else: version = 'PROD'
+    
     parameters = {
         'version': version, 'auditor': auditor, 
         'range_date': range_date, 'especific_date': especific_date
