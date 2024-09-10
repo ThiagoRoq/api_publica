@@ -41,7 +41,7 @@ def get_db_credentials():
     secret = secrets_manager.get_secret_value(SecretId=secret_arn)
 
     return {
-        "host": 'rds-pcd-prod.cluster-c4irymq85uhb.sa-east-1.rds.amazonaws.com',
+        "host": 'rds-dev-test-cluster.cluster-c4irymq85uhb.sa-east-1.rds.amazonaws.com',
         "user": json.loads(secret['SecretString'])['username'],
         "password": json.loads(secret['SecretString'])['password'],
     }
@@ -1505,6 +1505,7 @@ def update_request(request: DocumentRequest):
 def get_produtividade(filters: dict) -> List[Produtividade]:
     query = Queries.get_produtividade
     condition = ''
+    condition_date = ''
     params = []
 
     if filters['is_dev']:  # Verifica se é ambiente de desenvolvimento
@@ -1517,18 +1518,17 @@ def get_produtividade(filters: dict) -> List[Produtividade]:
         params.append(filters['auditor'])
     
     if filters.get('range_date'):
-        condition += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s "
-        condition += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s "
+        condition_date += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) >= %s"
+        condition_date += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) <= %s"
         for date in filters['range_date'].split(','):
             params.append(date)
-    
     if filters.get('especific_date'):
-        condition += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
+        condition_date += " AND DATE(CONVERT_TZ(created_at, '+00:00', '-04:00')) = %s "
         params.append(filters['especific_date'])
 
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(query.format(conditions=condition), params)
+    cursor.execute(query.format(conditions=condition, conditions_date=condition_date), params)
     requests = cursor.fetchall()
     return [Produtividade(*req) for req in requests]
 
