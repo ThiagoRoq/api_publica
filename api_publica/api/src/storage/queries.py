@@ -1152,24 +1152,27 @@ class Queries(str, Enum):
     GROUP_CONCAT(CONCAT(status_id, ':', IFNULL(Quantidade, 0)) ORDER BY status_id ASC SEPARATOR ',') AS 'Quantidade por Status',
     SUM(IFNULL(Quantidade, 0)) AS Total
     FROM (
-    SELECT
-        a.auditor,
-        st.id AS status_id,
-        IFNULL(COUNT(h.statusId), 0) AS Quantidade  -- Usar IFNULL para garantir que 0 seja retornado
-    FROM
-        (SELECT DISTINCT auditor FROM pcd.historico) a
-    CROSS JOIN pcd.status st
-    LEFT JOIN pcd.historico h 
+        SELECT
+            a.auditor,
+            st.id AS status_id,
+            IFNULL(COUNT(h.statusId), 0) AS Quantidade
+        FROM
+            (SELECT DISTINCT auditor FROM pcd.historico
+            WHERE {conditions}) a
+        CROSS JOIN pcd.status st
+        LEFT JOIN (
+            SELECT *
+            FROM pcd.historico
+            WHERE 1=1 {conditions_date}
+        ) h 
         ON h.auditor = a.auditor 
         AND h.statusId = st.id
-    GROUP BY
-        a.auditor,
-        st.id
+        GROUP BY
+            a.auditor,
+            st.id
     ) AS subquery
-    WHERE {conditions}
     GROUP BY
         auditor
     ORDER BY
-        Auditor;
-
+        Auditor
     '''
